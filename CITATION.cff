@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Borgqvist
+    given-names: Johannes Gabriel
+    orcid:  https://orcid.org/0000-0001-6441-2942
+title: "Generating the plots of the phase plane symmetries symmetries of separable models."
+version: 1.0
+doi: https://github.com/JohannesBorgqvist/separable_phase_plane_symmetries
+date-released: 2022-07-12
