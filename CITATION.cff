@@ -15,7 +15,7 @@ preferred-citation:
     given-names: "Johannes"
     orcid: "https://orcid.org/0000-0001-6441-2942"
   doi: "https://github.com/JohannesBorgqvist/separable_phase_plane_symmetries"
-  journal: "Bulletin of Mathematical Biology "
+  journal: "\\url{https://github.com/JohannesBorgqvist/separable_phase_plane_symmetries}"
   month: 7
   start: 1 # First page number
   end: 10 # Last page number
