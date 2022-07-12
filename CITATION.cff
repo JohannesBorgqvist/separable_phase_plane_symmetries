@@ -8,3 +8,18 @@ title: "Generating the plots of the phase plane symmetries symmetries of separab
 version: 1.0
 doi: https://github.com/JohannesBorgqvist/separable_phase_plane_symmetries
 date-released: 2022-07-12
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Borgqvist"
+    given-names: "Johannes"
+    orcid: "https://orcid.org/0000-0001-6441-2942"
+  doi: "10.0000/00000"
+  journal: "Bulletin of Mathematical Biology "
+  month: 7
+  start: 1 # First page number
+  end: 10 # Last page number
+  title: "Generating the plots of the phase plane symmetries symmetries of separable models."
+  issue: 1
+  volume: 1
+  year: 2022
