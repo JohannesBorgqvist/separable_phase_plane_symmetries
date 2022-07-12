@@ -14,7 +14,7 @@ preferred-citation:
   - family-names: "Borgqvist"
     given-names: "Johannes"
     orcid: "https://orcid.org/0000-0001-6441-2942"
-  doi: "10.0000/00000"
+  doi: "https://github.com/JohannesBorgqvist/separable_phase_plane_symmetries"
   journal: "Bulletin of Mathematical Biology "
   month: 7
   start: 1 # First page number
