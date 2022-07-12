@@ -5,7 +5,7 @@ Welcome to the github-repositry *separable\_phase\_plane\_symmetries*! This proj
 
 
 ## Description of the project
-This project concerns the symmetries of phase plane models that are commonly occuring in biology. Specifically, we consider the (u,v)-phase plane ODE for separable models. In particular we consider four different models, namely the Lotka-Volterra model whose symmetries are illustrated below. 
+This project concerns the symmetries of phase plane models that are commonly occuring in biology. Specifically, we consider the (u,v)-phase plane ODE for separable models. In particular we consider four different models, namely the *Lotka-Volterra model*, the *SIR model*, the *linear model* and the *biological oscillator* whose symmetries are illustrated below. 
 
 ![The symmetries of the LV-model](./Figures/LV_symmetries.png)
 
