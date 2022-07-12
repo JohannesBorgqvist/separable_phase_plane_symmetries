@@ -12,7 +12,7 @@ preferred-citation:
   type: article
   authors:
   - family-names: "Borgqvist"
-    given-names: "Johannes"
+    given-names: "Johannes G."
     orcid: "https://orcid.org/0000-0001-6441-2942"
   doi: "https://github.com/JohannesBorgqvist/separable_phase_plane_symmetries"
   journal: "https://github.com/JohannesBorgqvist/separable\\_phase\\_plane\\_symmetries"
