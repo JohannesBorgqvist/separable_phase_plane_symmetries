@@ -8,5 +8,5 @@ Welcome to the github-repositry *separable\_phase\_plane\_symmetries*! This proj
 This project concerns the symmetries of phase plane models that are commonly occuring in biology. Specifically, we consider the following (u,v)-phase plane ODE:
 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\dfrac{v}{u}=e^{i \pi} = -1"><br>
+<img src="https://render.githubusercontent.com/render/math?math=\dfrac{v}{u} = e^{i \pi} = -1"><br>
 </p>
