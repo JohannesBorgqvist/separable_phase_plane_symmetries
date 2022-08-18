@@ -473,8 +473,6 @@ ax_3[1][1].tick_params(axis='both', which='minor', labelsize=20)
 # We have a title of this figure as well
 f3.suptitle('Symmetries of the linear model',fontsize=30,weight='bold')
 f3.savefig('../Figures/symmetries_linear_model.png')
-
-
 #=================================================================================
 #=================================================================================
 # Transforming the biological oscillator
