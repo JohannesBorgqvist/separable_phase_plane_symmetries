@@ -31,8 +31,8 @@ def dX_dt_LV(X, t=0,a=1):
     return array([ X[0]*(1-X[1]) ,
                    a*X[1]*(X[0]-1)])
 # Function 2: u_transf
-def u_transf(u, epsilon):
-    func = lambda u_hat :  u - log(u) + epsilon - (u_hat - log(u_hat))
+def u_transf(u, epsilon,alpha):
+    func = lambda u_hat :  alpha*(u - log(u)) + epsilon - alpha*(u_hat - log(u_hat))
     if abs(u-1)<0.000000000001:
         u_hat_solution = u
     else:
