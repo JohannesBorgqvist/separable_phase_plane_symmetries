@@ -46,6 +46,8 @@ plt.tick_params(axis='both', which='minor', labelsize=20)
 # Title and saving the figure
 plt.title('Solutions of the Lotka-Volterra model',fontsize=30,weight='bold')
 #plt.savefig('../Figures/LV_solutions.png')
+plot_LaTeX_2D(t,u,"../Figures/LaTeX_figures/LV_push_forward/Input/tau_trans.tex","color=clr_1,line width=1.5pt,","$u(\\tau)$")
+plot_LaTeX_2D(t,v,"../Figures/LaTeX_figures/LV_push_forward/Input/tau_trans.tex","color=clr_3,line width=1.5pt,","$v(\\tau)$")
 #=================================================================================
 #=================================================================================
 # Plot the action of the u-directional symmetry
@@ -133,6 +135,14 @@ plt.tick_params(axis='both', which='minor', labelsize=20)
 # Title and saving the figure
 plt.title('Symmetry $\\Gamma_{\epsilon}^{\\mathrm{LV},u}$',fontsize=30,weight='bold')
 #plt.show()
+plot_LaTeX_2D(t,u,"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=clr_1,line width=1.5pt,","$u(\\tau)$")
+plot_LaTeX_2D(t_2,u_2,"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=clr_2,line width=1.5pt,","$\\hat{u}(\\hat{\\tau})$")
+# The symmetry
+for index in range(len(Gamma_u_t_vec)):
+    if index == 0:
+        plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_u_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=black,->,>=latex,densely dashed","$\\Gamma^{\mathrm{LV},u}_{\\epsilon}$")
+    else:
+        plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_u_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=black,->,>=latex,densely dashed",[])
 #=================================================================================
 #=================================================================================
 # Plot the action of the v-directional symmetry
@@ -216,3 +226,12 @@ plt.tick_params(axis='both', which='minor', labelsize=20)
 # Title and saving the figure
 plt.title('Symmetry $\\Gamma_{\epsilon}^{\\mathrm{LV},v}$',fontsize=30,weight='bold')
 plt.show()
+
+plot_LaTeX_2D(t,v,"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=clr_3,line width=1.5pt,","$v(\\tau)$")
+plot_LaTeX_2D(t_2,v_2,"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=clr_4,line width=1.5pt,","$\\hat{v}(\\hat{\\tau})$")
+# The symmetry
+for index in range(len(Gamma_v_t_vec)):
+    if index == 0:
+        plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_v_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=black,->,>=latex,densely dashed","$\\Gamma^{\mathrm{LV},v}_{\\epsilon}$")
+    else:
+        plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_v_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=black,->,>=latex,densely dashed",[])
