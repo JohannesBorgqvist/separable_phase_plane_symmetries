@@ -26,3 +26,4 @@
 /Code/.ipynb_checkpoints
 # Also, we make a folder with a temporary presentation which we do not want to push
 /Presentations/
+/Figures/LaTeX_figures/

@@ -14,16 +14,24 @@
 #=================================================================================
 #=================================================================================
 #!python
+# Numpy for numerical packages and vectors
 from numpy import *
-import pylab as p
-import matplotlib.pyplot as plt
+# Scipy to do all the computations and integrations
 from scipy import integrate
 from scipy.optimize import fsolve
+from scipy import integrate # For solving ODEs.
+# Import the lambert W function from scipy
+from scipy.special import lambertw
+# Import quad so we can evaluate our integral as well
+from scipy.integrate import quad
 #=================================================================================
 #=================================================================================
 # The Functions
 #=================================================================================
 #=================================================================================
+#==============================================================
+# Phase plane symmetries
+#==============================================================
 # Function 1: dX_dt
 # This is a help function defining the ODE system we want to solve.
 def dX_dt_LV(X, t=0,a=1):
@@ -103,3 +111,55 @@ def Gamma_theta_os(X, epsilon=0,*parameters):
     omega = parameters[0]
     # Return the dynamics of the biological oscillator
     return array([ -(X[1]/omega),(X[0]/omega)])
+#==============================================================
+# Push forward symmetries
+#==============================================================
+# Function 12: For our tricky integrand
+def integrand_u(s,u_val,v_val,alpha,branch_number):
+    # Calculate the internal energy
+    H = alpha*u_val+v_val - log((u_val**alpha)*v_val)
+    # Define the invariant
+    I_s = -((exp(s)/s)**(alpha))*(1/exp(H))
+    # Calculate our main factor in the tangent which depends on the Lambert W function 
+    factor = 1+lambertw(I_s,branch_number).real
+    # Now we can define the denominator
+    denom = factor*((s-1)**2)
+    # Now, we can return the integral
+    return -1/denom
+# Function 13: ODE for the u-directional symmetry of the LV model
+def dX_deps_LV_u(X, t=0,*parameters):
+    # Extract the parameters
+    alpha = parameters[0]
+    branch_number = parameters[1]
+    u_min = parameters[2]
+    # Solve the integral for the time tangent
+    xi_u = quad(integrand_u, u_min, X[1], args=(X[1],X[2],alpha,branch_number))[0]
+    # Return the dynamics of the linear system
+    return array([xi_u,
+                  (1/alpha)*(X[1]/(X[1]-1)),
+                 0])
+# Function 14: For our tricky integrand
+def integrand_v(s,u_val,v_val,alpha,branch_number):
+    # Calculate the internal energy
+    H = alpha*u_val+v_val - log((u_val**alpha)*v_val)
+    # Define the invariant
+    I_s = -(1/alpha)*(((exp(s-H))/(alpha*s))**(1/alpha))
+    # Calculate our main factor in the tangent which depends on the Lambert W function 
+    factor = 1+lambertw(I_s,branch_number).real
+    # Now we can define the denominator
+    denom = factor*((1-s)**2)
+    # Now, we can return the integral
+    return -1/denom
+# Function 15: ODE for the v-directional symmetry of the LV model
+def dX_deps_LV_v(X, t=0,*parameters):
+    # Extract the parameters
+    alpha = parameters[0]
+    branch_number = parameters[1]
+    v_min = parameters[2]
+    # Solve the integral for the time tangent
+    xi_v = quad(integrand_v, v_min, X[2], args=(X[1],X[2],alpha,branch_number))[0]
+    # Return the dynamics of the linear system
+    return array([xi_v,
+                  0,
+                 ((X[2])/(1-X[2]))])
+#==============================================================
