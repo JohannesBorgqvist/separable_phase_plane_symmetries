@@ -104,6 +104,6 @@ ax_1[0].tick_params(axis='both', which='minor', labelsize=20)
 ax_1[1].tick_params(axis='both', which='major', labelsize=20)
 ax_1[1].tick_params(axis='both', which='minor', labelsize=20)
 # Title and saving the figure
-f1.suptitle('Symmetries of the Lotka-Volterra model',fontsize=30,weight='bold')
-f1.savefig('../Figures/LV_symmetries.png')
+f1.suptitle('Phase plane symmetries of the Lotka-Volterra model',fontsize=30,weight='bold')
+f1.savefig('../Figures/phase_plane_symmetries_LV.png')
 plt.show()
