@@ -24,6 +24,9 @@ from scipy import integrate # For solving ODEs.
 from scipy.special import lambertw
 # Import quad so we can evaluate our integral as well
 from scipy.integrate import quad
+# Import matplotlib
+import matplotlib
+import matplotlib.pyplot as plt
 #=================================================================================
 #=================================================================================
 # The Functions
@@ -96,16 +99,22 @@ def dX_dt_os(X, t=0,*parameters):
     # Return the dynamics of the linear system
     return array([ X[0]*(1-r)-omega*X[1],
                    X[1]*(1-r)+omega*X[0]])
-# Function 10: Gamma_r_os for the oscillatory model
+# Function 10: dX_dt_os_polar for the oscillatory model
+def dX_dt_os_polar(X, t=0,*parameters):
+    # Extract the parameters
+    omega = parameters[0]   
+    # Return the dynamics of the linear system
+    return array([ omega,
+                   X[1]*(1-X[1])])
+# Function 11: Gamma_r_os for the oscillatory model
 def Gamma_r_os(X, epsilon=0,*parameters):
     # Extract the parameters
     omega = parameters[0]
     # Define the radius
     r = sqrt(X[0]**2+X[1]**2)
     # Return the dynamics of the biological oscillator
-    return array([(1-r)*X[0],(1-r)*X[1]])
-                   
-# Function 11: Gamma_theta_os for the oscillatory model
+    return array([(1-r)*X[0],(1-r)*X[1]])                   
+# Function 12: Gamma_theta_os for the oscillatory model
 def Gamma_theta_os(X, epsilon=0,*parameters):
     # Extract the parameters
     omega = parameters[0]
@@ -162,8 +171,31 @@ def dX_deps_LV_v(X, t=0,*parameters):
     return array([xi_v,
                   0,
                  ((X[2])/(1-X[2]))])
+# Function 16: Gamma_r_os_time for the oscillatory model
+def Gamma_r_os_time(X, epsilon=0,*parameters):
+    # Extract the parameters
+    omega = parameters[0]
+    H = parameters[1]
+    # Calculate the radius
+    r = sqrt(X[2]**2+X[1]**2)    
+    # Return the dynamics of the biological oscillator
+    return array([H, (1-r)*X[1],(1-r)*X[2]])
+# Function 16.5: Gamma_r_os_time_polar for the oscillatory model
+def Gamma_r_os_time_polar(X, epsilon=0,*parameters):
+    # Extract the parameters
+    omega = parameters[0]
+    H = parameters[1]
+    # Return the dynamics of the biological oscillator
+    return array([H, 0,X[2]*(1-X[2])])                   
+# Function 17: Gamma_theta_os for the oscillatory model
+def Gamma_theta_os_time(X, epsilon=0,*parameters):
+    # Extract the parameters
+    omega = parameters[0]
+    H = parameters[1]        
+    # Return the dynamics of the biological oscillator
+    return array([H, -omega*X[2],omega*X[1]])
 #==============================================================
-# Function 6: plot_LaTeX_2D
+# Function 7: plot_LaTeX_2D
 # This functions enable us to reproduce our plots using pgfplots in LaTeX
 def plot_LaTeX_2D(t,y,file_str,plot_str,legend_str):
     # Open a file with the append option

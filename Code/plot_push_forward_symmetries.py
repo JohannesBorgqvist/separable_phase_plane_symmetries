@@ -19,219 +19,186 @@ from symmetry_toolbox import *
 import matplotlib.pyplot as plt # For plotting,
 #=================================================================================
 #=================================================================================
-# Plot the solutions
+# Transforming the biological oscillator
 #=================================================================================
 #=================================================================================
-# Define the time vector and the initial conditions
-t = linspace(0, 10, 500)              # time
-X0 = array([1, 0.10])                     # initials conditions: 10 rabbits and 5 foxes
-# Define our parameter alpha
-alpha = 1
-# Solve the ODE at hand
-X1, infodict = integrate.odeint(dX_dt_LV, X0, t, args = (alpha,),full_output=True)
-infodict['message'] # >>> 'Integration successful.'
-# Split the solution into its component parts
-u, v = X1.T
-# Plot our lovely solutions
-fig_1 = plt.figure(constrained_layout=True, figsize=(20, 8))
-plt.plot(t, u, '-', label="Prey, $u(\\tau)$" ,color=(0/256,68/256,27/256),linewidth=3.0)
-plt.plot(t, v  , '-', label='Predator, $v(\\tau)$',color=(77/256,0/256,75/256),linewidth=3.0)
-plt.grid()
-plt.legend(loc='best',prop={"size":20})
-plt.xlabel(xlabel='Time, $\\tau$',fontsize=25)
-plt.ylabel(ylabel='Population size',fontsize=25)
-# Change the size of the ticks
-plt.tick_params(axis='both', which='major', labelsize=20)
-plt.tick_params(axis='both', which='minor', labelsize=20)
-# Title and saving the figure
-plt.title('Solutions of the Lotka-Volterra model',fontsize=30,weight='bold')
-#plt.savefig('../Figures/LV_solutions.png')
-plot_LaTeX_2D(t,u,"../Figures/LaTeX_figures/LV_push_forward/Input/tau_trans.tex","color=clr_1,line width=1.5pt,","$u(\\tau)$")
-plot_LaTeX_2D(t,v,"../Figures/LaTeX_figures/LV_push_forward/Input/tau_trans.tex","color=clr_3,line width=1.5pt,","$v(\\tau)$")
+# ---------------------------------------------------------------------------
+# Overall properties
+# ---------------------------------------------------------------------------
+# The frequency rate
+omega = 1
+# Define the time vector
+t = linspace(0, 6, 500)              # Time
+X0 = array([2, 2])                  # ICs
+# Calculate the internal energy based on these initial conditions
+# Define the radius
+r = sqrt(X0[1]**2+X0[0]**2)
+# Define the angle
+theta = arctan(X0[1]/X0[0])
+# Define the internal energy
+H = ((r)/(abs(1-r)))*exp(-((theta)/(omega)))
+print(H)
+# Solve the system of ODEs
+#X1_os, infodict = integrate.odeint(dX_dt_os, X0, t, args = ((omega),),full_output=True)
+X1_os, infodict = integrate.odeint(dX_dt_os_polar, array([theta,r]), t, args = (omega,),full_output=True)
+# Extract the original solution with the defined parameters and initial conditions
+#u_os, v_os = X1_os.T
+theta_os, r_os = X1_os.T
+u_os = r_os*cos(theta_os)
+v_os = r_os*sin(theta_os)
+# Transformation parameters
+epsilon_r=1
+epsilon_theta = pi/2
+# Plot the action of the symmetry
+epsilon_vec = arange(0,epsilon_r,epsilon_r/100)
+#=================================================================================
+# The indices we wish to transform
+lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
+# Allocate our empty lists
+Gamma_os_r_t_1 = []
+Gamma_os_r_u_1 = []
+Gamma_os_r_v_1 = []
+# Loop over our indices and find the transformations
+for lin_index in lin_indices:
+    # Get our transformations
+    X_r, infodict = integrate.odeint(Gamma_r_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec, args = ((omega),H),full_output=True)
+    #infodict['message']                     # >>> 'Integration successful.'
+    #X_r_polar, infodict = integrate.odeint(Gamma_r_os_time_polar, array([t[lin_index],arctan(v_os[lin_index]/u_os[lin_index]),sqrt(u_os[lin_index]**2+v_os[lin_index]**2)]), epsilon_vec, args = (omega,H),full_output=True)
+    infodict['message']                     # >>> 'Integration successful.'    
+    # Extract transformations
+    Gamma_os_r_t_temp,Gamma_os_r_u_temp, Gamma_os_r_v_temp = X_r.T
+    #Gamma_os_r_t_temp,Gamma_os_r_theta_temp, Gamma_os_r_r_temp = X_r_polar.T
+    # Save our transformations
+    Gamma_os_r_t_1.append(Gamma_os_r_t_temp)
+    Gamma_os_r_u_1.append(Gamma_os_r_u_temp)
+    Gamma_os_r_v_1.append(Gamma_os_r_v_temp)
+    #Gamma_os_r_u_1.append(Gamma_os_r_r_temp*cos(Gamma_os_r_theta_temp))
+    #Gamma_os_r_v_1.append(Gamma_os_r_r_temp*sin(Gamma_os_r_theta_temp))
+# The transformed time as well
+t_transformed_r = linspace(Gamma_os_r_t_1[0][-1],t[-1],len(t))
+print((Gamma_os_r_t_1[0][-1],Gamma_os_r_u_1[0][-1],Gamma_os_r_v_1[0][-1]))
+# Solve to get the transformed angle solution
+#theta = arctan(Gamma_os_r_v_1[0][-1]/Gamma_os_r_u_1[0][-1])
+#r = sqrt(Gamma_os_r_u_1[0][-1]**2+Gamma_os_r_v_1[0][-1]**2)
+#X1_r, infodict = integrate.odeint(dX_dt_os_polar, array([theta,r]), t_transformed, args = (omega,),full_output=True)
+X1_r, infodict = integrate.odeint(dX_dt_os, array([Gamma_os_r_u_1[0][-1], Gamma_os_r_v_1[0][-1]]), t_transformed_r, args = ((omega),),full_output=True)    
+# Extract the solution
+u_os_r_2, v_os_r_2 = X1_r.T
+print((t_transformed_r[0],u_os_r_2[0],v_os_r_2[0]))
+#theta_os, r_os = X1_r.T
+#u_os_r_2 = r_os*cos(theta_os)
+#v_os_r_2 = r_os*sin(theta_os)
+#--------------------------------------------------------------------------------------------------
+# The indices we wish to transform
+lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
+# Plot the action of the symmetry
+epsilon_vec = arange(0,epsilon_theta,epsilon_theta/50)
+# Allocate our empty lists
+Gamma_os_theta_t_1 = []
+Gamma_os_theta_u_1 = []
+Gamma_os_theta_v_1 = []
+# Loop over our indices and find the transformations
+for lin_index in lin_indices:
+    # Get our transformations
+    X_theta, infodict = integrate.odeint(Gamma_theta_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec, args = ((omega),H),full_output=True)
+    infodict['message']                     # >>> 'Integration successful.'
+    # Extract transformations
+    Gamma_os_theta_t_temp,Gamma_os_theta_u_temp, Gamma_os_theta_v_temp = X_theta.T
+    # Save our transformations
+    Gamma_os_theta_t_1.append(Gamma_os_theta_t_temp)
+    Gamma_os_theta_u_1.append(Gamma_os_theta_u_temp)
+    Gamma_os_theta_v_1.append(Gamma_os_theta_v_temp)
+# The transformed time as well
+t_transformed_theta = linspace(Gamma_os_theta_t_1[0][-1],t[-1],len(t))
+# Solve to get the transformed angle solution
+X1_theta, infodict = integrate.odeint(dX_dt_os, array([Gamma_os_theta_u_1[0][-1], Gamma_os_theta_v_1[0][-1]]), t_transformed_theta, args = ((omega,H)),full_output=True)    
+# Extract the solution
+u_os_theta_2, v_os_theta_2 = X1_theta.T
 #=================================================================================
 #=================================================================================
-# Plot the action of the u-directional symmetry
+# Plot the oscillatory system
 #=================================================================================
 #=================================================================================
-# Set the value of alpha
-alpha = 1
-# Epsilon value
-epsilon = 0.5
-# The transformation parameter
-epsilon_vec = linspace(0,epsilon,200)              # epsilon
-# We know that Lambertz w satisfies the following (see https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.lambertw.html):
-# The principal branch (k=0) is real if z>-1/e,
-# The branch (k>1) is real if -1/e < z < 0.
-# Let's make an experiment.
-# Magical index
-magical_index = 5
-# Calculate the minimal u value
-u_min = 1
-# Take a point
-X0 = array([t[magical_index], u[magical_index], v[magical_index]])
-# Try to solve the ODE at hand
-Gamma_epsilon, infodict = integrate.odeint(dX_deps_LV_u, X0, epsilon_vec, args = (alpha,0,u_min),full_output=True)
-# Split the solution into its component parts
-Gamma_u_t, Gamma_u_u, Gamma_u_v = Gamma_epsilon.T
-# Define a new time vector 
-t_2 = linspace(Gamma_u_t[-1], 10, 500)
-# We need to integrate backwards in time as well to start at 0
-t_2_start = linspace(Gamma_u_t[-1], 0, 10)
-# Define new initial conditions for the transformed solutions
-X02 = array([Gamma_u_t[-1], Gamma_u_u[-1], Gamma_u_v[-1]])  
-X0_2 = array([Gamma_u_u[-1], Gamma_u_v[-1]])  
-# Solve the ODE at hand with the new initial conditions
-# Integrate backwards to get to 0
-X2_start, infodict = integrate.odeint(dX_dt_LV, X0_2, t_2_start, args = (1,),full_output=True)
-# Find the rest of the solution
-X2, infodict = integrate.odeint(dX_dt_LV, X0_2, t_2, args = (1,),full_output=True)
-#infodict['message'] # >>> 'Integration successful.'
-# Split the solution into its component parts
-u_2, v_2 = X2.T
-# Split the start bit as well
-u_2_start, v_2_start = X2_start.T
-# Concatenate to get the full solution curves and the full time
-u_2 = concatenate((flip(u_2_start,0), u_2), axis=0)
-v_2 = concatenate((flip(v_2_start,0), v_2), axis=0)
-t_2 = concatenate((flip(t_2_start,0), t_2), axis=0)
-# Plot the symmetry again for some other point on the solution curves
-magical_indices = [50, 60, 70, 80, 85, 90, 95, 100, 105, 110]
-# The corresponding branches
-branch_indices = [0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1]
-# Allocate memory for our lovely symmetry
-Gamma_u_t_vec = []
-Gamma_u_u_vec = []
-# Loop over the indices and plot the symmetry transformation
-for branch_index,new_magical_index in enumerate(magical_indices):
-    # Take a point
-    X0 = array([t[new_magical_index], u[new_magical_index], v[new_magical_index]])  
-    # Try to solve the ODE at hand
-    Gamma_epsilon_temp, infodict = integrate.odeint(dX_deps_LV_u, X0, epsilon_vec, args = (alpha,branch_indices[branch_index],u_min),full_output=True)    
-    # Split the solution into its component parts
-    Gamma_u_t_temp, Gamma_u_u_temp, Gamma_u_v_temp = Gamma_epsilon_temp.T    
-    # Append our solutions
-    Gamma_u_t_vec.append(Gamma_u_t_temp)    
-    Gamma_u_u_vec.append(Gamma_u_u_temp)    
-#-------------------------------------------------------------------------------------------------------------------------------
-# Se if we can plot our symmetry?
-fig_2 = plt.figure(constrained_layout=True, figsize=(20, 8))
-# The original solution
-plt.plot(t, u, '-', label="Prey, $u(\\tau)$" ,color=(0/256,68/256,27/256),linewidth=3.0)
-# The transformed solution
-plt.plot(t_2, u_2, '-', label="Prey, $\\hat{u}(\\hat{\\tau})$" ,color=(35/256,139/256,69/256),linewidth=3.0)
-# The symmetry
-for index in range(len(Gamma_u_t_vec)):
-    if index == 0:
-        plt.plot(Gamma_u_t_vec[index],Gamma_u_u_vec[index], '--', label="Symmetry, $\\Gamma_{\\epsilon}^{\\mathrm{LV},u}$" ,color=(0/256,0/256,0/256),linewidth=3.0)
-    else:
-        plt.plot(Gamma_u_t_vec[index],Gamma_u_u_vec[index], '--',color=(0/256,0/256,0/256),linewidth=3.0)
-plt.grid()
-plt.legend(loc='best',prop={"size":20})
-plt.xlabel(xlabel='Time, $\\tau$',fontsize=25)
-plt.ylabel(ylabel='Population size',fontsize=25)
-# Change the size of the ticks
-plt.tick_params(axis='both', which='major', labelsize=20)
-plt.tick_params(axis='both', which='minor', labelsize=20)
-# Title and saving the figure
-plt.title('Symmetry $\\Gamma_{\epsilon}^{\\mathrm{LV},u}$',fontsize=30,weight='bold')
-#plt.show()
-plot_LaTeX_2D(t,u,"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=clr_1,line width=1.5pt,","$u(\\tau)$")
-plot_LaTeX_2D(t_2,u_2,"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=clr_2,line width=1.5pt,","$\\hat{u}(\\hat{\\tau})$")
-# The symmetry
-for index in range(len(Gamma_u_t_vec)):
-    if index == 0:
-        plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_u_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=black,->,>=latex,densely dashed","$\\Gamma^{\mathrm{LV},u}_{\\epsilon}$")
-    else:
-        plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_u_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/u_trans.tex","color=black,->,>=latex,densely dashed",[])
-#=================================================================================
-#=================================================================================
-# Plot the action of the v-directional symmetry
-#=================================================================================
-#=================================================================================
-# Epsilon value
-epsilon = 0.5
-# The transformation parameter
-epsilon_vec = linspace(0,epsilon,200)              # epsilon
-# Magical index
-magical_index = 130
-# Print the value of v
-print(v[magical_index])
-# Take a point
-X0 = array([t[magical_index], u[magical_index], v[magical_index]])
-# Define the minimal u value
-v_min = 1
-# Try to solve the ODE at hand
-Gamma_epsilon, infodict = integrate.odeint(dX_deps_LV_v, X0, epsilon_vec, args = (alpha,0,v_min),full_output=True)
-# Split the solution into its component parts
-Gamma_v_t, Gamma_v_u, Gamma_v_v = Gamma_epsilon.T
-# Define a new time vector 
-t_2 = linspace(Gamma_v_t[-1], 10, 100)
-# We need to integrate backwards in time as well to start at 0
-t_2_start = linspace(Gamma_v_t[-1], 0, 400)
-# Define new initial conditions for the transformed solutions
-X02 = array([Gamma_v_t[-1], Gamma_v_u[-1], Gamma_v_v[-1]])  
-X0_2 = array([Gamma_v_u[-1], Gamma_v_v[-1]])  
-# Solve the ODE at hand with the new initial conditions
-# Integrate backwards to get to 0
-X2_start, infodict = integrate.odeint(dX_dt_LV, X0_2, t_2_start, args = (1,),full_output=True)
-# Find the rest of the solution
-X2, infodict = integrate.odeint(dX_dt_LV, X0_2, t_2, args = (1,),full_output=True)
-#infodict['message'] # >>> 'Integration successful.'
-# Split the solution into its component parts
-u_2, v_2 = X2.T
-# Split the start bit as well
-u_2_start, v_2_start = X2_start.T
-# Concatenate to get the full solution curves and the full time
-u_2 = concatenate((flip(u_2_start,0), u_2), axis=0)
-v_2 = concatenate((flip(v_2_start,0), v_2), axis=0)
-t_2 = concatenate((flip(t_2_start,0), t_2), axis=0)
-# Plot the symmetry again for some other point on the solution curves
-magical_indices = [magical_index-15,magical_index-10,magical_index-5,magical_index,magical_index+5,magical_index+10,magical_index+15]
-# The corresponding branches
-branch_indices = [-1,-1,-1,0,0,0,0,0]
-# Allocate memory for our lovely symmetry
-Gamma_v_t_vec = []
-Gamma_v_v_vec = []
-# Loop over the indices and plot the symmetry transformation
-for branch_index,new_magical_index in enumerate(magical_indices):
-    # Take a point
-    X0 = array([t[new_magical_index], u[new_magical_index], v[new_magical_index]])  
-    # Try to solve the ODE at hand
-    Gamma_epsilon_temp, infodict = integrate.odeint(dX_deps_LV_v, X0, epsilon_vec, args = (alpha,branch_indices[branch_index],v_min),full_output=True)    
-    # Split the solution into its component parts
-    Gamma_v_t_temp, Gamma_v_u_temp, Gamma_v_v_temp = Gamma_epsilon_temp.T    
-    # Append our solutions
-    Gamma_v_t_vec.append(Gamma_v_t_temp)    
-    Gamma_v_v_vec.append(Gamma_v_v_temp)  
-#-------------------------------------------------------------------------------------------------------------------------------
-# Se if we can plot our symmetry?
-fig_3 = plt.figure(constrained_layout=True, figsize=(20, 8))
-# The original solution
-plt.plot(t, v, '-', label="Predator, $v(\\tau)$" ,color=(77/256,0/256,75/256),linewidth=3.0)
-# The transformed solution
-plt.plot(t_2, v_2, '-', label="Predator, $\\hat{v}(\\hat{\\tau})$" ,color=(136/256,65/256,157/256),linewidth=3.0)
+# Set all parameters to tex
+plt.rcParams['text.usetex'] = True
+#Define the first figure
+f1, ax_1 = plt.subplots(1, 2, constrained_layout=True, figsize=(20, 8))
+# Plot 1: Radial symmetry on the biological oscillator
+ax_1[0].plot(t,u_os,color=(0/256,68/256,27/256),label="$u(t)$",linewidth=4.0)
+ax_1[0].plot(t_transformed_r,u_os_r_2,color=(35/256,139/256,69/256),label="$\\hat{u}(t)$",linewidth=4.0)
+ax_1[0].plot(t,v_os,color=(103/256,0/256,31/256),label="$v(t)$",linewidth=4.0)
+ax_1[0].plot(t_transformed_r,v_os_r_2,color=(206/256,18/256,86/256),label="$\\hat{v}(t)$",linewidth=4.0)
 # Plot the symmetry
-for index in range(len(Gamma_v_t_vec)):
+for index in range(len(Gamma_os_r_u_1)):
     if index == 0:
-        plt.plot(Gamma_v_t_vec[index],Gamma_v_v_vec[index], '--', label="Symmetry, $\\Gamma_{\\epsilon}^{\\mathrm{LV},v}$" ,color=(0/256,0/256,0/256),linewidth=3.0)
+        ax_1[0].plot(Gamma_os_r_t_1[index], Gamma_os_r_u_1[index],'--',color=(0,0,0),label="$\\Gamma_{\\epsilon}^{r}$",linewidth=2.5)
+        ax_1[0].plot(Gamma_os_r_t_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),linewidth=2.5)        
     else:
-        plt.plot(Gamma_v_t_vec[index],Gamma_v_v_vec[index], '--',color=(0/256,0/256,0/256),linewidth=3.0)
-plt.grid()
-plt.legend(loc='best',prop={"size":20})
-plt.xlabel(xlabel='Time, $\\tau$',fontsize=25)
-plt.ylabel(ylabel='Population size',fontsize=25)
-# Change the size of the ticks
-plt.tick_params(axis='both', which='major', labelsize=20)
-plt.tick_params(axis='both', which='minor', labelsize=20)
-# Title and saving the figure
-plt.title('Symmetry $\\Gamma_{\epsilon}^{\\mathrm{LV},v}$',fontsize=30,weight='bold')
+        ax_1[0].plot(Gamma_os_r_t_1[index], Gamma_os_r_u_1[index],'--',color=(0,0,0),linewidth=2.5)
+        ax_1[0].plot(Gamma_os_r_t_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),linewidth=2.5)   
+ax_1[0].grid()
+ax_1[0].legend(loc='best',prop={"size":20})
+ax_1[0].set_xlabel(xlabel="Time, $t$",fontsize=25)
+ax_1[0].set_ylabel(ylabel="Function value",fontsize=25)
+ax_1[0].tick_params(axis='both', which='major', labelsize=20)
+ax_1[0].tick_params(axis='both', which='minor', labelsize=20)
+# Plot 2: Angular symmetry on the biological oscillator
+ax_1[1].plot(t,u_os,color=(0/256,68/256,27/256),label="$u(t)$",linewidth=4.0)
+ax_1[1].plot(t_transformed_theta,u_os_theta_2,color=(35/256,139/256,69/256),label="$\\hat{u}(t)$",linewidth=4.0)
+ax_1[1].plot(t,v_os,color=(103/256,0/256,31/256),label="$v(t)$",linewidth=4.0)
+ax_1[1].plot(t_transformed_theta,v_os_theta_2,color=(206/256,18/256,86/256),label="$\\hat{v}(t)$",linewidth=4.0)
+# Plot the symmetry
+for index in range(len(Gamma_os_theta_u_1)):
+    if index == 0:
+        ax_1[1].plot(Gamma_os_theta_t_1[index], Gamma_os_theta_u_1[index],'--',color=(0,0,0),label="$\\Gamma_{\\epsilon}^{\\theta}$",linewidth=2.5)
+        ax_1[1].plot(Gamma_os_theta_t_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),linewidth=2.5)        
+    else:
+        ax_1[1].plot(Gamma_os_theta_t_1[index], Gamma_os_theta_u_1[index],'--',color=(0,0,0),linewidth=2.5)
+        ax_1[1].plot(Gamma_os_theta_t_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),linewidth=2.5)   
+ax_1[1].grid()
+ax_1[1].legend(loc='best',prop={"size":20})
+ax_1[1].set_xlabel(xlabel="Time, $t$",fontsize=25)
+ax_1[1].set_ylabel(ylabel="Function value",fontsize=25)
+ax_1[1].tick_params(axis='both', which='major', labelsize=20)
+ax_1[1].tick_params(axis='both', which='minor', labelsize=20)
+# We have a title of this figure as well
+f1.suptitle('Symmetries of the biological oscillator',fontsize=30,weight='bold')
+f1.savefig('../Figures/symmetries_biological_oscillator_time_domain.png')
+# Show the plot in the end
 plt.show()
-
-plot_LaTeX_2D(t,v,"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=clr_3,line width=1.5pt,","$v(\\tau)$")
-plot_LaTeX_2D(t_2,v_2,"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=clr_4,line width=1.5pt,","$\\hat{v}(\\hat{\\tau})$")
-# The symmetry
-for index in range(len(Gamma_v_t_vec)):
+#=================================================================================
+#=================================================================================
+# Plot in LaTeX as well...
+# RADIAL SYMMETRY
+#=================================================================================
+#=================================================================================
+#--------------------------------------------------------------------------------
+# radial
+#--------------------------------------------------------------------------------
+for index in range(0,len(Gamma_os_r_u_1)):
     if index == 0:
-        plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_v_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=black,->,>=latex,densely dashed","$\\Gamma^{\mathrm{LV},v}_{\\epsilon}$")
+        plot_LaTeX_2D(Gamma_os_r_t_1[index], Gamma_os_r_u_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\sigma}_{3,\\epsilon}$")
+        plot_LaTeX_2D(Gamma_os_r_t_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
     else:
-        plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_v_vec[index],"../Figures/LaTeX_figures/LV_push_forward/Input/v_trans.tex","color=black,->,>=latex,densely dashed",[])
+        plot_LaTeX_2D(Gamma_os_r_t_1[index], Gamma_os_r_u_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
+        plot_LaTeX_2D(Gamma_os_r_t_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
+# Plot the solutions as well
+plot_LaTeX_2D(t,u_os,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=r_1,line width=1.5pt,","$u(t)$")
+plot_LaTeX_2D(t_transformed_r,u_os_r_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=r_2,line width=1.5pt,","$\\hat{u}(t)$")
+plot_LaTeX_2D(t,v_os,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=r_3,line width=1.5pt,","$v(t)$")
+plot_LaTeX_2D(t_transformed_r,v_os_r_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r.tex","color=r_4,line width=1.5pt,","$\\hat{v}(t)$")
+#--------------------------------------------------------------------------------
+# angular
+#--------------------------------------------------------------------------------
+for index in range(0,len(Gamma_os_theta_u_1)):
+    if index == 0:
+        plot_LaTeX_2D(Gamma_os_theta_t_1[index], Gamma_os_theta_u_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\theta}_{3,\\epsilon}$")
+        plot_LaTeX_2D(Gamma_os_theta_t_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
+    else:
+        plot_LaTeX_2D(Gamma_os_theta_t_1[index], Gamma_os_theta_u_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
+        plot_LaTeX_2D(Gamma_os_theta_t_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
+# Plot the solutions as well
+plot_LaTeX_2D(t,u_os,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=r_1,line width=1.5pt,","$u(t)$")
+plot_LaTeX_2D(t_transformed_theta,u_os_theta_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=r_2,line width=1.5pt,","$\\hat{u}(t)$")
+plot_LaTeX_2D(t,v_os,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=r_3,line width=1.5pt,","$v(t)$")
+plot_LaTeX_2D(t_transformed_theta,v_os_theta_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta.tex","color=r_4,line width=1.5pt,","$\\hat{v}(t)$")

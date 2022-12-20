@@ -67,7 +67,7 @@ for t_index in list(t_indices):
 u_sym = []
 u_indices = arange(70,125,3)
 for u_index in list(u_indices):
-    trans_vec = [u_transf(u[u_index],epsilon_temp) for epsilon_temp in list(epsilon_vec)]
+    trans_vec = [u_transf(u[u_index],epsilon_temp,alpha) for epsilon_temp in list(epsilon_vec)]
     u_sym.append(trans_vec)
 # Transformations v
 v_sym = []
@@ -81,7 +81,7 @@ for v_index in list(v_indices):
 #=================================================================================
 #=================================================================================
 #Define the first figure
-f1, ax_1 = p.subplots(1, 3, constrained_layout=True, figsize=(20, 8))
+f1, ax_1 = plt.subplots(1, 3, constrained_layout=True, figsize=(20, 8))
 ax_1[0].plot(asarray(t_sym[0]),asarray([u[t_indices[0]]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]), '--', label="$\\left.\\Gamma_{\\epsilon}^{\\tau}\\right|_{\\epsilon=" +str(epsilon) + "}$" ,color=(0,0,0),linewidth=2.0)
 for index,t_index in enumerate(list(t_indices)):
     ax_1[0].plot(asarray(t_sym[index]),asarray([u[t_index]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]), '--' ,color=(0,0,0),linewidth=2.0)
