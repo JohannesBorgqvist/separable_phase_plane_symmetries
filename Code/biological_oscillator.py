@@ -4,8 +4,7 @@
 # Date: 2022-12-20
 # Implemented by: Johannes Borgqvist
 # Description:
-# The script plots the phase plane symmetries as well as the corresponding symmetries
-# of the biological oscillator in the time domain.
+# The script plots the phase plane symmetries as well as the corresponding symmetries of the biological oscillator in the time domain.
 #=================================================================================
 #=================================================================================
 #=================================================================================
