@@ -4,8 +4,8 @@
 # Date: 2022-12-20
 # Implemented by: Johannes Borgqvist
 # Description:
-# The script plots the phase plane symmetries as well as the lifted symmetries
-# of the biological oscillator
+# The script plots the phase plane symmetries as well as the corresponding symmetries
+# of the biological oscillator in the time domain.
 #=================================================================================
 #=================================================================================
 #=================================================================================
@@ -115,8 +115,6 @@ ax_1[1].tick_params(axis='both', which='minor', labelsize=20)
 # We have a title of this figure as well
 f1.suptitle('Phase plane symmetries of the biological oscillator',fontsize=30,weight='bold')
 f1.savefig('../Figures/phase_plane_symmetries_biological_oscillator.png')
-# Show the plot in the end
-#plt.show()
 #=================================================================================
 #=================================================================================
 # Time domain symmetries of the biological oscillator
@@ -138,7 +136,6 @@ theta = arctan(X0[1]/X0[0])
 # Define the internal energy
 H = ((r)/(abs(1-r)))*exp(-((theta)/(omega)))
 # Solve the system of ODEs
-#X1_os, infodict = integrate.odeint(dX_dt_os, X0, t, args = ((omega),),full_output=True)
 X1_os, infodict = integrate.odeint(dX_dt_os_polar, array([theta,r]), t, args = (omega,),full_output=True)
 # Extract the original solution with the defined parameters and initial conditions
 #u_os, v_os = X1_os.T
@@ -161,30 +158,19 @@ Gamma_os_r_v_1 = []
 for lin_index in lin_indices:
     # Get our transformations
     X_r, infodict = integrate.odeint(Gamma_r_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec, args = ((omega),H),full_output=True)
-    #infodict['message']                     # >>> 'Integration successful.'
-    #X_r_polar, infodict = integrate.odeint(Gamma_r_os_time_polar, array([t[lin_index],arctan(v_os[lin_index]/u_os[lin_index]),sqrt(u_os[lin_index]**2+v_os[lin_index]**2)]), epsilon_vec, args = (omega,H),full_output=True)
     infodict['message']                     # >>> 'Integration successful.'    
     # Extract transformations
     Gamma_os_r_t_temp,Gamma_os_r_u_temp, Gamma_os_r_v_temp = X_r.T
-    #Gamma_os_r_t_temp,Gamma_os_r_theta_temp, Gamma_os_r_r_temp = X_r_polar.T
     # Save our transformations
     Gamma_os_r_t_1.append(Gamma_os_r_t_temp)
     Gamma_os_r_u_1.append(Gamma_os_r_u_temp)
     Gamma_os_r_v_1.append(Gamma_os_r_v_temp)
-    #Gamma_os_r_u_1.append(Gamma_os_r_r_temp*cos(Gamma_os_r_theta_temp))
-    #Gamma_os_r_v_1.append(Gamma_os_r_r_temp*sin(Gamma_os_r_theta_temp))
 # The transformed time as well
 t_transformed_r = linspace(Gamma_os_r_t_1[0][-1],t[-1],len(t))
 # Solve to get the transformed angle solution
-#theta = arctan(Gamma_os_r_v_1[0][-1]/Gamma_os_r_u_1[0][-1])
-#r = sqrt(Gamma_os_r_u_1[0][-1]**2+Gamma_os_r_v_1[0][-1]**2)
-#X1_r, infodict = integrate.odeint(dX_dt_os_polar, array([theta,r]), t_transformed, args = (omega,),full_output=True)
 X1_r, infodict = integrate.odeint(dX_dt_os, array([Gamma_os_r_u_1[0][-1], Gamma_os_r_v_1[0][-1]]), t_transformed_r, args = ((omega),),full_output=True)    
 # Extract the solution
 u_os_r_2, v_os_r_2 = X1_r.T
-#theta_os, r_os = X1_r.T
-#u_os_r_2 = r_os*cos(theta_os)
-#v_os_r_2 = r_os*sin(theta_os)
 #--------------------------------------------------------------------------------------------------
 # The indices we wish to transform
 lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
