@@ -248,7 +248,7 @@ for index in range(len(Gamma_os_r_u_1)):
 ax_2[0].grid()
 ax_2[0].legend(loc='best',prop={"size":20})
 ax_2[0].set_xlabel(xlabel="Time, $t$",fontsize=25)
-ax_2[0].set_ylabel(ylabel="States",fontsize=25)
+ax_2[0].set_ylabel(ylabel="State",fontsize=25)
 ax_2[0].tick_params(axis='both', which='major', labelsize=20)
 ax_2[0].tick_params(axis='both', which='minor', labelsize=20)
 # Plot 2: Angular symmetry on the biological oscillator
@@ -267,7 +267,7 @@ for index in range(len(Gamma_os_theta_u_1)):
 ax_2[1].grid()
 ax_2[1].legend(loc='best',prop={"size":20})
 ax_2[1].set_xlabel(xlabel="Time, $t$",fontsize=25)
-ax_2[1].set_ylabel(ylabel="States",fontsize=25)
+ax_2[1].set_ylabel(ylabel="State",fontsize=25)
 ax_2[1].tick_params(axis='both', which='major', labelsize=20)
 ax_2[1].tick_params(axis='both', which='minor', labelsize=20)
 # We have a title of this figure as well
