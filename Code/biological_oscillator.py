@@ -27,7 +27,7 @@ plt.rcParams['text.usetex'] = True
 # Overall properties
 # ---------------------------------------------------------------------------
 # Transformation parameters
-epsilon_r=0.33
+epsilon_r=0.75
 epsilon_theta = pi/6
 # The indices we wish to transform
 lin_indices = arange(0,60,6)
@@ -129,9 +129,9 @@ plot_LaTeX_2D(u_os_r_2,v_os_r_2,"../Figures/LaTeX_figures/oscillator_symmetries/
 # Plot the symmetries in the phase plane
 for index in range(len(Gamma_os_r_u_1)):
     if index == 0:
-        ax_1[0].plot(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),label="$\\Gamma_{\\epsilon}^{r}$",linewidth=0.5)
+        plot_LaTeX_2D(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\sigma}_{2,\\epsilon}$")                
     else:
-        ax_1[0].plot(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),linewidth=0.5)
+        plot_LaTeX_2D(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
 #--------------------------------------------------------------------------------
 # angular
 #--------------------------------------------------------------------------------
@@ -141,9 +141,9 @@ plot_LaTeX_2D(u_os_theta_2,v_os_theta_2,"../Figures/LaTeX_figures/oscillator_sym
 # Plot the symmetries in the phase plane
 for index in range(len(Gamma_os_theta_u_1)):
     if index == 0:
-        ax_1[1].plot(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),label="$\\Gamma_{\\epsilon}^{\\theta}$",linewidth=0.5)
+        plot_LaTeX_2D(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\theta}_{2,\\epsilon}$")        
     else:
-        ax_1[1].plot(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),linewidth=0.5)
+        plot_LaTeX_2D(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
 #=================================================================================
 #=================================================================================
 # Time domain symmetries of the biological oscillator
