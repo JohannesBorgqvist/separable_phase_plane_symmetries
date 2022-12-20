@@ -107,3 +107,32 @@ ax_1[1].tick_params(axis='both', which='minor', labelsize=20)
 f1.suptitle('Phase plane symmetries of the Lotka-Volterra model',fontsize=30,weight='bold')
 f1.savefig('../Figures/phase_plane_symmetries_LV.png')
 plt.show()
+#=================================================================================
+#=================================================================================
+# Plot phase plane symmetries in LaTeX as well...
+#=================================================================================
+#=================================================================================
+#--------------------------------------------------------------------------------
+# u-directional
+#--------------------------------------------------------------------------------
+# Plot the solutions in the phase plane
+plot_LaTeX_2D(u, v,"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_phase.tex","color=phase_1,line width=1.5pt,","$(u,v)$")
+plot_LaTeX_2D(u_transformed_2,v_transformed_2,"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_phase.tex","color=phase_2,line width=1.5pt,","$(\\hat{u},\\hat{v})$")
+# Plot the symmetries in the phase plane
+for index in range(len(Gamma_os_r_u_1)):
+    if index == 0:
+        plot_LaTeX_2D(asarray(u_sym[index]),asarray([v[u_index]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]),"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{LV},u}_{2,\\epsilon}$")                
+    else:
+        plot_LaTeX_2D(asarray(u_sym[index]),asarray([v[u_index]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]),"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
+#--------------------------------------------------------------------------------
+# v-directional
+#--------------------------------------------------------------------------------
+# # Plot the solutions in the phase plane
+# plot_LaTeX_2D(u_3,v_3,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=phase_1,line width=1.5pt,","$(u,v)$")
+# plot_LaTeX_2D(u_os_theta_2,v_os_theta_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=phase_2,line width=1.5pt,","$(\\hat{u},\\hat{v})$")
+# # Plot the symmetries in the phase plane
+# for index in range(len(Gamma_os_theta_u_1)):
+#     if index == 0:
+#         plot_LaTeX_2D(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\theta}_{2,\\epsilon}$")        
+#     else:
+#         plot_LaTeX_2D(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
