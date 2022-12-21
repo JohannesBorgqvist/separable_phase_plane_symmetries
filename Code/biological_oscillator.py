@@ -271,7 +271,7 @@ ax_2[1].set_ylabel(ylabel="State",fontsize=25)
 ax_2[1].tick_params(axis='both', which='major', labelsize=20)
 ax_2[1].tick_params(axis='both', which='minor', labelsize=20)
 # We have a title of this figure as well
-f2.suptitle('Symmetries of the biological oscillator',fontsize=30,weight='bold')
+f2.suptitle('Symmetries of the biological oscillator in the time domain',fontsize=30,weight='bold')
 f2.savefig('../Figures/time_domain_symmetries_biological_oscillator.png')
 # Show the plot in the end
 plt.show()
