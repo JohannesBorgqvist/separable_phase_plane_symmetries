@@ -88,9 +88,9 @@ ax_1[0].plot(u_3,v_3,color=(0/256,68/256,27/256),label="$(u,v)$",linewidth=4.0)
 ax_1[0].plot(u_os_r_2,v_os_r_2,color=(0/256,109/256,44/256),label="$(\\hat{u},\\hat{v})$",linewidth=4.0)
 for index in range(len(Gamma_os_r_u_1)):
     if index == 0:
-        ax_1[0].plot(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),label="$\\Gamma_{\\epsilon}^{r}$",linewidth=0.5)
+        ax_1[0].plot(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),label="$\\Gamma_{2,\\epsilon}^{\\mathrm{Osc},\\sigma}$",linewidth=2.5)
     else:
-        ax_1[0].plot(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),linewidth=0.5)
+        ax_1[0].plot(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],'--',color=(0,0,0),linewidth=2.5)
 ax_1[0].grid()
 ax_1[0].legend(loc='best',prop={"size":20})
 ax_1[0].set_xlabel(xlabel="$u{(t)}$",fontsize=25)
@@ -102,9 +102,9 @@ ax_1[1].plot(u_3,v_3,color=(103/256,0/256,31/256),label="$(u,v)$",linewidth=4.0)
 ax_1[1].plot(u_os_theta_2,v_os_theta_2,color=(206/256,18/256,86/256),label="$(\\hat{u},\\hat{v})$",linewidth=4.0)
 for index in range(len(Gamma_os_theta_u_1)):
     if index == 0:
-        ax_1[1].plot(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),label="$\\Gamma_{\\epsilon}^{\\theta}$",linewidth=0.5)
+        ax_1[1].plot(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),label="$\\Gamma_{2,\\epsilon}^{\\mathrm{Osc},\\theta}$",linewidth=2.5)
     else:
-        ax_1[1].plot(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),linewidth=0.5)
+        ax_1[1].plot(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],'--',color=(0,0,0),linewidth=2.5)
 ax_1[1].grid()
 ax_1[1].legend(loc='best',prop={"size":20})
 ax_1[1].set_xlabel(xlabel="$u{(t)}$",fontsize=25)
@@ -122,27 +122,27 @@ f1.savefig('../Figures/phase_plane_symmetries_biological_oscillator.png')
 #--------------------------------------------------------------------------------
 # radial
 #--------------------------------------------------------------------------------
-# Plot the solutions in the phase plane
-plot_LaTeX_2D(u_3,v_3,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=phase_1,line width=1.5pt,","$(u,v)$")
-plot_LaTeX_2D(u_os_r_2,v_os_r_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=phase_2,line width=1.5pt,","$(\\hat{u},\\hat{v})$")
 # Plot the symmetries in the phase plane
 for index in range(len(Gamma_os_r_u_1)):
     if index == 0:
         plot_LaTeX_2D(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\sigma}_{2,\\epsilon}$")                
     else:
-        plot_LaTeX_2D(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
+        plot_LaTeX_2D(Gamma_os_r_u_1[index], Gamma_os_r_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
+# Plot the solutions in the phase plane
+plot_LaTeX_2D(u_3,v_3,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=phase_1,line width=1.5pt,","$(u,v)$")
+plot_LaTeX_2D(u_os_r_2,v_os_r_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/r_phase.tex","color=phase_2,line width=1.5pt,","$(\\hat{u},\\hat{v})$")   
 #--------------------------------------------------------------------------------
 # angular
 #--------------------------------------------------------------------------------
-# Plot the solutions in the phase plane
-plot_LaTeX_2D(u_3,v_3,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=phase_1,line width=1.5pt,","$(u,v)$")
-plot_LaTeX_2D(u_os_theta_2,v_os_theta_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=phase_2,line width=1.5pt,","$(\\hat{u},\\hat{v})$")
 # Plot the symmetries in the phase plane
 for index in range(len(Gamma_os_theta_u_1)):
     if index == 0:
         plot_LaTeX_2D(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{Osc},\\theta}_{2,\\epsilon}$")        
     else:
         plot_LaTeX_2D(Gamma_os_theta_u_1[index], Gamma_os_theta_v_1[index],"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
+# Plot the solutions in the phase plane
+plot_LaTeX_2D(u_3,v_3,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=phase_1,line width=1.5pt,","$(u,v)$")
+plot_LaTeX_2D(u_os_theta_2,v_os_theta_2,"../Figures/LaTeX_figures/oscillator_symmetries/Input/theta_phase.tex","color=phase_2,line width=1.5pt,","$(\\hat{u},\\hat{v})$")
 #=================================================================================
 #=================================================================================
 # Time domain symmetries of the biological oscillator
