@@ -201,8 +201,28 @@ def dX_dt_SIR(X, t=0,*parameters):
     a = parameters[0]
     r = parameters[1]
     #Return the ODE s
-    return array([ -a*X[0]*X[1] ,
-                   a*X[0]*X[1]-r*X[1]])
+    return array([ -r*X[0]*X[1] ,
+                   r*X[0]*X[1]-a*X[1]])
+# Function 19: The integrand for the S-directional symmetry of the
+# SIR model
+def integrand_S(s,H_SIR,r,p):
+    # Now we can define the denominator
+    denom = r*((p-s)**2)*(s-p*log(s)-H_SIR)
+    # Now, we can return the integral
+    return 1/denom
+# Function 20: ODE for the v-directional symmetry of the LV model
+def dX_deps_SIR_S(X, t=0,*parameters):
+    # Extract the parameters
+    H_SIR = parameters[0]
+    r = parameters[1]
+    p = parameters[2]
+    S0 = parameters[3]
+    # Solve the integral for the time tangent
+    xi_S = quad(integrand_S, S0, X[1], args=(H_SIR,r,p))[0]
+    # Return the dynamics of the linear system
+    return array([xi_S,
+                  X[1]/(p-X[1]),
+                  0])
 #==============================================================
 # Function 7: plot_LaTeX_2D
 # This functions enable us to reproduce our plots using pgfplots in LaTeX
