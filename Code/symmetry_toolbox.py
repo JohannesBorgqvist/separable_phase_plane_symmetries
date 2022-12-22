@@ -194,6 +194,15 @@ def Gamma_theta_os_time(X, epsilon=0,*parameters):
     H = parameters[1]        
     # Return the dynamics of the biological oscillator
     return array([H, -omega*X[2],omega*X[1]])
+# Function 18: dX_dt_SIR
+# This is a help function defining the ODE system we want to solve.
+def dX_dt_SIR(X, t=0,*parameters):
+    # Extract the parameters
+    a = parameters[0]
+    r = parameters[1]
+    #Return the ODE s
+    return array([ -a*X[0]*X[1] ,
+                   a*X[0]*X[1]-r*X[1]])
 #==============================================================
 # Function 7: plot_LaTeX_2D
 # This functions enable us to reproduce our plots using pgfplots in LaTeX
