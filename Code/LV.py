@@ -375,6 +375,7 @@ ax_2[1].tick_params(axis='both', which='minor', labelsize=20)
 #-----------------------------------------------------------------------------------------------------
 # Title and saving the figure
 f2.suptitle('LV symmetries in the time domain',fontsize=30,weight='bold');
+f2.savefig('../Figures/time_domain_symmetries_LV.png')
 plt.show()
 #=================================================================================
 #=================================================================================
