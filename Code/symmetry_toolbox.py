@@ -59,8 +59,9 @@ def v_transf(v, epsilon, alpha):
     return v_hat_solution
 # Function 4: S_transf
 def S_transf(S, epsilon, a, r):
-    #func = lambda S_hat :  S - (1/r)*log(a-r*S)+epsilon-S_hat+(1/r)*log(a-r*S_hat)
-    func = lambda S_hat :  S - (a/r)*log(S)+epsilon-(S_hat - (a/r)*log(S_hat))
+    # Incorrectly implemented?
+    #func = lambda S_hat :  S - (a/r)*log(S)+epsilon-(S_hat - (a/r)*log(S_hat))
+    func = lambda S_hat :  (a/r)*log(S)-S+epsilon-((a/r)*log(S_hat) - S_hat)    
     S_hat_solution = fsolve(func, S)[0]
     return S_hat_solution
 # Function 5: IC
@@ -142,7 +143,7 @@ def dX_deps_LV_u(X, t=0,*parameters):
     branch_number = parameters[1]
     u_min = parameters[2]
     # Solve the integral for the time tangent
-    xi_u = quad(integrand_u, u_min, X[1], args=(X[1],X[2],alpha,branch_number))[0]
+    xi_u = quad(integrand_u, u_min, X[1], args=(X[1],X[2],alpha,branch_number),epsrel = 1e-012)[0]
     # Return the dynamics of the linear system
     return array([xi_u,
                   (1/alpha)*(X[1]/(X[1]-1)),
@@ -166,7 +167,7 @@ def dX_deps_LV_v(X, t=0,*parameters):
     branch_number = parameters[1]
     v_min = parameters[2]
     # Solve the integral for the time tangent
-    xi_v = quad(integrand_v, v_min, X[2], args=(X[1],X[2],alpha,branch_number))[0]
+    xi_v = quad(integrand_v, v_min, X[2], args=(X[1],X[2],alpha,branch_number),epsrel = 1e-012)[0]
     # Return the dynamics of the linear system
     return array([xi_v,
                   0,
@@ -210,7 +211,7 @@ def integrand_S(s,H_SIR,r,p):
     denom = r*((p-s)**2)*(s-p*log(s)-H_SIR)
     # Now, we can return the integral
     return 1/denom
-# Function 20: ODE for the v-directional symmetry of the LV model
+# Function 20: ODE for the S-directional symmetry of the SIR model
 def dX_deps_SIR_S(X, t=0,*parameters):
     # Extract the parameters
     H_SIR = parameters[0]
@@ -223,6 +224,31 @@ def dX_deps_SIR_S(X, t=0,*parameters):
     return array([xi_S,
                   X[1]/(p-X[1]),
                   0])
+# Function 21: The integrand for the I-directional symmetry of the
+# SIR model
+def integrand_I(s,H_SIR,r,p,branch_number):
+    # Define the thingy we're taking the lambert function of
+    I_I = -(exp(s/p)/p)
+    #Define our lovely factor
+    factor_I = 1+lambertw(I_I,branch_number).real
+    # Now we can define the denominator
+    denom = r*p*(s**2)*factor_I
+    # Now, we can return the integral
+    return 1/denom
+# Function 22: ODE for the I-directional symmetry of the SIR model
+def dX_deps_SIR_I(X, t=0,*parameters):
+    # Extract the parameters
+    H_SIR = parameters[0]
+    r = parameters[1]
+    p = parameters[2]
+    I0 = parameters[3]
+    branch_number = parameters[4]
+    # Solve the integral for the time tangent
+    xi_I = quad(integrand_I, I0, X[2], args=(H_SIR,r,p,branch_number),epsrel = 1e-012)[0]
+    # Return the dynamics of the linear system
+    return array([xi_I,
+                  0,
+                  1])
 #==============================================================
 # Function 7: plot_LaTeX_2D
 # This functions enable us to reproduce our plots using pgfplots in LaTeX
