@@ -129,11 +129,12 @@ def integrand_u(s,u_val,v_val,alpha,branch_number):
     # Calculate the internal energy
     H = alpha*u_val+v_val - log((u_val**alpha)*v_val)
     # Define the invariant
-    I_s = -((exp(s)/s)**(alpha))*(1/exp(H))
+    #I_s = -((exp(s)/s)**(alpha))*(1/exp(H))
+    I_s = -exp(alpha*(s-log(s)-H))
     # Calculate our main factor in the tangent which depends on the Lambert W function 
     factor = 1+lambertw(I_s,branch_number).real
     # Now we can define the denominator
-    denom = factor*((s-1)**2)
+    denom = factor*((s-1)**2)*alpha
     # Now, we can return the integral
     return -1/denom
 # Function 13: ODE for the u-directional symmetry of the LV model
@@ -153,11 +154,12 @@ def integrand_v(s,u_val,v_val,alpha,branch_number):
     # Calculate the internal energy
     H = alpha*u_val+v_val - log((u_val**alpha)*v_val)
     # Define the invariant
-    I_s = -(1/alpha)*(((exp(s-H))/(alpha*s))**(1/alpha))
+    #I_s = -(1/alpha)*(((exp(s-H))/(alpha*s))**(1/alpha))
+    I_s = -exp((1/alpha)*(s-log(s)-H))
     # Calculate our main factor in the tangent which depends on the Lambert W function 
     factor = 1+lambertw(I_s,branch_number).real
     # Now we can define the denominator
-    denom = factor*((1-s)**2)
+    denom = factor*((1-s)**2)*alpha
     # Now, we can return the integral
     return -1/denom
 # Function 15: ODE for the v-directional symmetry of the LV model

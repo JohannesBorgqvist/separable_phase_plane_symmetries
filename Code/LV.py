@@ -58,21 +58,21 @@ u_transformed_2, v_transformed_2 = X3.T
 t_trans = asarray([t_temp + epsilon for t_temp in list(t)])
 # Transformations time translation
 t_sym = []
-epsilon_vec = arange(0, epsilon-0.005, epsilon/50)
-t_indices = arange(60, 78, 3)
+epsilon_vec = arange(0, epsilon, epsilon/50)
+t_indices = list(arange(60, 78, 3))
 for t_index in list(t_indices):
     trans_vec = [t[t_index]+epsilon_temp for epsilon_temp in list(epsilon_vec)]
     t_sym.append(trans_vec)
 # Transformations u
 u_sym = []
-u_indices = arange(70, 125, 3)
+u_indices = [40, 60, 75, 90, 100, 110, 130, 145, 150, 160, 290, 307]
 for u_index in list(u_indices):
     trans_vec = [u_transf(u[u_index], epsilon_temp, alpha)
                  for epsilon_temp in list(epsilon_vec)]
     u_sym.append(trans_vec)
 # Transformations v
 v_sym = []
-v_indices = arange(107, 150, 2)
+v_indices = [30, 50, 64, 106, 112, 117,125, 140, 155, 170, 300, 350, 400, -1]
 for v_index in list(v_indices):
     trans_vec = [v_transf(v[v_index], epsilon_temp, alpha)
                  for epsilon_temp in list(epsilon_vec)]
@@ -95,7 +95,7 @@ for index, u_index in enumerate(list(u_indices)):
     ax_1[0].plot(asarray(u_sym[index]), asarray([v[u_index]*((index+1)/(index+1))
                                                  for index in range(len(epsilon_vec))]), '--', color=(0, 0, 0), linewidth=2.0)
 ax_1[0].grid()
-ax_1[0].legend(loc='best', prop={"size": 20})
+#ax_1[0].legend(loc='best', prop={"size": 20})
 # v-directional symmetry
 ax_1[1].plot(u, v, '-', label='Original population, $(u,v)$',
              color=(0/256, 68/256, 27/256), linewidth=3.0)
@@ -107,7 +107,7 @@ for index, v_index in enumerate(list(v_indices)):
     ax_1[1].plot(asarray([u[v_index]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]),
                  asarray(v_sym[index]), '--', color=(0, 0, 0), linewidth=2.0)
 ax_1[1].grid()
-ax_1[1].legend(loc='best', prop={"size": 20})
+#ax_1[1].legend(loc='best', prop={"size": 20})
 # Set fontsize of labels
 ax_1[0].set_xlabel(xlabel='Rabbits, $u(t)$', fontsize=25)
 ax_1[0].set_ylabel(ylabel='Foxes, $v(t)$', fontsize=25)
@@ -216,9 +216,8 @@ u_2_u = concatenate((flip(u_2_start,0), u_2), axis=0)
 v_2_u = concatenate((flip(v_2_start,0), v_2), axis=0)
 t_2_u = concatenate((flip(t_2_start,0), t_2), axis=0)
 # Plot the symmetry again for some other point on the solution curves
-magical_indices = [25, 35, 45, 55, 65, 75, 85, 90,95,100, 105, 110, 115, 120, 130]
-#branch_indices = [-1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0]
-branch_indices = [0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1,-1,-1]
+magical_indices = [25, 60, 85,97,110, 130,134,160, 175]
+branch_indices = [0, 0,0, -1,-1, -1, -1,-1,-1]
 # Allocate memory for our lovely symmetry
 Gamma_u_t_vec = []
 Gamma_u_u_vec = []
@@ -248,7 +247,6 @@ delta = 0.05
 epsilon_vec = linspace(0,epsilon-delta,200)              # epsilon
 # Magical index
 magical_index = 115
-#magical_index = 131
 # Calculate the minimal u value
 v_min = min(v)
 v_max = max(v)
@@ -291,9 +289,9 @@ u_2_v = concatenate((flip(u_2_start,0), u_2), axis=0)
 v_2_v = concatenate((flip(v_2_start,0), v_2), axis=0)
 t_2_v = concatenate((flip(t_2_start,0), t_2), axis=0)
 # Plot the symmetry again for some other point on the solution curves
-magical_indices_v = [106,108,114,117,120,123,126,129,132,135,138,141,144,148]
+magical_indices_v = [30, 50, 65, 106, 120,130, 138, 145]
 # The corresponding branches
-branch_indices_v = [-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0]
+branch_indices_v = [-1, -1, -1, -1, -1, 0, 0, 0, 0]
 # Allocate memory for our lovely symmetry
 Gamma_v_t_vec = []
 Gamma_v_u_vec = []
@@ -334,7 +332,7 @@ for index in range(len(Gamma_u_t_vec)):
         ax_2[0].plot(Gamma_u_t_vec[index],Gamma_u_v_vec[index], '--',color=(0/256,0/256,0/256),linewidth=3.0)
 # Grid, legends and other stuff
 ax_2[0].grid()
-ax_2[0].legend(loc='best',prop={"size":20})
+#ax_2[0].legend(loc='best',prop={"size":20})
 ax_2[0].set_xlim([0, 4])
 ax_2[0].set_ylim([0, 5.2])
 ax_2[0].set_xlabel(xlabel='Time, $t$',fontsize=25)
@@ -363,7 +361,7 @@ for index in range(len(Gamma_v_t_vec)):
         ax_2[1].plot(Gamma_v_t_vec[index],Gamma_v_v_vec[index], '--',color=(0/256,0/256,0/256),linewidth=3.0)
 # Grid, legends and other stuff
 ax_2[1].grid()
-ax_2[1].legend(loc='best',prop={"size":20})
+#ax_2[1].legend(loc='best',prop={"size":20})
 ax_2[1].set_xlim([0, 4])
 ax_2[1].set_ylim([0, 5.2])
 ax_2[1].set_xlabel(xlabel='Time, $t$',fontsize=25)
