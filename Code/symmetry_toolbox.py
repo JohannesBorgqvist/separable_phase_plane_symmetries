@@ -59,8 +59,7 @@ def v_transf(v, epsilon, alpha):
     return v_hat_solution
 # Function 4: S_transf
 def S_transf(S, epsilon, a, r):
-    # Incorrectly implemented?
-    #func = lambda S_hat :  S - (a/r)*log(S)+epsilon-(S_hat - (a/r)*log(S_hat))
+    # Solve for the S_hat value
     func = lambda S_hat :  (a/r)*log(S)-S+epsilon-((a/r)*log(S_hat) - S_hat)    
     S_hat_solution = fsolve(func, S)[0]
     return S_hat_solution
@@ -210,9 +209,9 @@ def dX_dt_SIR(X, t=0,*parameters):
 # SIR model
 def integrand_S(s,H_SIR,r,p):
     # Now we can define the denominator
-    denom = r*((p-s)**2)*(s-p*log(s)-H_SIR)
+    denom = r*((p-s)**2)*(H_SIR - s + p*log(s))
     # Now, we can return the integral
-    return 1/denom
+    return -1/denom
 # Function 20: ODE for the S-directional symmetry of the SIR model
 def dX_deps_SIR_S(X, t=0,*parameters):
     # Extract the parameters
@@ -230,13 +229,14 @@ def dX_deps_SIR_S(X, t=0,*parameters):
 # SIR model
 def integrand_I(s,H_SIR,r,p,branch_number):
     # Define the thingy we're taking the lambert function of
-    I_I = -(exp(s/p)/p)
+    I_I = -(exp((s+H_SIR)/p)/p)
+    #I_I = -(exp((s-H_SIR)/p)/p)
     #Define our lovely factor
     factor_I = 1+lambertw(I_I,branch_number).real
     # Now we can define the denominator
     denom = r*p*(s**2)*factor_I
     # Now, we can return the integral
-    return 1/denom
+    return -1/denom
 # Function 22: ODE for the I-directional symmetry of the SIR model
 def dX_deps_SIR_I(X, t=0,*parameters):
     # Extract the parameters
