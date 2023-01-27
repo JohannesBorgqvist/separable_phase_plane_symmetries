@@ -124,12 +124,12 @@ def Gamma_theta_os(X, epsilon=0,*parameters):
 # Push forward symmetries
 #==============================================================
 # Function 12: For our tricky integrand
-def integrand_u(s,u_val,v_val,alpha,branch_number):
-    # Calculate the internal energy
-    H = alpha*u_val+v_val - log((u_val**alpha)*v_val)
+def integrand_u(s,alpha,branch_number,H):
     # Define the invariant
     #I_s = -((exp(s)/s)**(alpha))*(1/exp(H))
-    I_s = -exp(alpha*(s-log(s)-H))
+    #I_s = -exp(alpha*(s-log(s)-H))
+    #I_s = (1/alpha)*(exp(s-H)/(alpha*s))**(1/alpha)
+    I_s = (exp(s)/s)**alpha*(1/exp(H))    
     # Calculate our main factor in the tangent which depends on the Lambert W function 
     factor = 1+lambertw(I_s,branch_number).real
     # Now we can define the denominator
@@ -142,8 +142,9 @@ def dX_deps_LV_u(X, t=0,*parameters):
     alpha = parameters[0]
     branch_number = parameters[1]
     u_min = parameters[2]
+    H = parameters[3]
     # Solve the integral for the time tangent
-    xi_u = quad(integrand_u, u_min, X[1], args=(X[1],X[2],alpha,branch_number),epsrel = 1e-012)[0]
+    xi_u = quad(integrand_u, u_min, X[1], args=(alpha,branch_number,H),epsrel = 1e-012)[0]
     # Return the dynamics of the linear system
     return array([xi_u,
                   (1/alpha)*(X[1]/(X[1]-1)),
