@@ -88,7 +88,7 @@ ax_1[0].plot(u, v, '-', label='Original population, $(u,v)$',
 ax_1[0].plot(u_transformed_2, v_transformed_2, '-',
              label='Transformed population, $(\\hat{u},v)$', color=(35/256,139/256,69/256), linewidth=3.0)
 ax_1[0].plot(asarray(u_sym[0]), asarray([v[u_indices[0]]*(index+1)/(index+1) for index in range(len(epsilon_vec))]), '--',
-             label="$\\left.\\Gamma_{2,\\epsilon}^{u}\\right|_{\\epsilon=" + str(epsilon) + "}$", color=(0, 0, 0), linewidth=2.0)
+             label="$\\Gamma_{2,\\epsilon}^{\\mathrm{LV},u}$", color=(0, 0, 0), linewidth=2.0)
 for index, u_index in enumerate(list(u_indices)):
     ax_1[0].plot(asarray(u_sym[index]), asarray([v[u_index]*((index+1)/(index+1))
                                                  for index in range(len(epsilon_vec))]), '--', color=(0, 0, 0), linewidth=2.0)
@@ -100,7 +100,7 @@ ax_1[1].plot(u, v, '-', label='Original population, $(u,v)$',
 ax_1[1].plot(u_transformed, v_transformed, '-',
              label='Transformed population, $(u,\\hat{v})$', color=(35/256,139/256,69/256), linewidth=3.0)
 ax_1[1].plot(asarray([u[v_indices[0]]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]), asarray(v_sym[0]),
-             '--', label="$\\left.\\Gamma_{2,\\epsilon}^{v}\\right|_{\\epsilon=" + str(epsilon) + "}$", color=(0, 0, 0), linewidth=2.0)
+             '--', label="$\\Gamma_{2,\\epsilon}^{\\mathrm{LV},v}$", color=(0, 0, 0), linewidth=2.0)
 for index, v_index in enumerate(list(v_indices)):
     ax_1[1].plot(asarray([u[v_index]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]),
                  asarray(v_sym[index]), '--', color=(0, 0, 0), linewidth=2.0)
