@@ -124,12 +124,9 @@ def Gamma_theta_os(X, epsilon=0,*parameters):
 # Push forward symmetries
 #==============================================================
 # Function 12: For our tricky integrand
-def integrand_u(s,alpha,branch_number,H):
+def integrand_u(s,alpha,branch_number,H):    
     # Define the invariant
-    #I_s = -((exp(s)/s)**(alpha))*(1/exp(H))
-    #I_s = -exp(alpha*(s-log(s)-H))
-    #I_s = (1/alpha)*(exp(s-H)/(alpha*s))**(1/alpha)
-    I_s = (exp(s)/s)**alpha*(1/exp(H))    
+    I_s = -(exp(s)/s)**alpha*(1/exp(H))    
     # Calculate our main factor in the tangent which depends on the Lambert W function 
     factor = 1+lambertw(I_s,branch_number).real
     # Now we can define the denominator
@@ -141,20 +138,21 @@ def dX_deps_LV_u(X, t=0,*parameters):
     # Extract the parameters
     alpha = parameters[0]
     branch_number = parameters[1]
-    u_min = parameters[2]
-    H = parameters[3]
+    # Calculate H and u0 for
+    H = X[2] + alpha*X[1] - log((X[1]**alpha)*X[2])
+    if X[1]<1:
+        u_0 = -lambertw(-exp((1-H)/alpha),0).real
+    else:
+        u_0 = -lambertw(-exp((1-H)/alpha),-1).real        
     # Solve the integral for the time tangent
-    xi_u = quad(integrand_u, u_min, X[1], args=(alpha,branch_number,H),epsrel = 1e-012)[0]
+    xi_u = quad(integrand_u, u_0, X[1], args=(alpha,branch_number,H),epsrel = 1e-012)[0]
     # Return the dynamics of the linear system
     return array([xi_u,
                   (1/alpha)*(X[1]/(X[1]-1)),
                  0])
 # Function 14: For our tricky integrand
-def integrand_v(s,u_val,v_val,alpha,branch_number):
-    # Calculate the internal energy
-    H = alpha*u_val+v_val - log((u_val**alpha)*v_val)
+def integrand_v(s,alpha,branch_number,H):
     # Define the invariant
-    #I_s = -(1/alpha)*(((exp(s-H))/(alpha*s))**(1/alpha))
     I_s = -exp((1/alpha)*(s-log(s)-H))
     # Calculate our main factor in the tangent which depends on the Lambert W function 
     factor = 1+lambertw(I_s,branch_number).real
@@ -167,9 +165,14 @@ def dX_deps_LV_v(X, t=0,*parameters):
     # Extract the parameters
     alpha = parameters[0]
     branch_number = parameters[1]
-    v_min = parameters[2]
+    # Calculate H and v0 for
+    H = X[2] + alpha*X[1] - log((X[1]**alpha)*X[2])
+    if X[2]<1:
+        v_0 = -lambertw(-exp(alpha-H),0).real
+    else:
+        v_0 = -lambertw(-exp(alpha-H),-1).real
     # Solve the integral for the time tangent
-    xi_v = quad(integrand_v, v_min, X[2], args=(X[1],X[2],alpha,branch_number),epsrel = 1e-012)[0]
+    xi_v = quad(integrand_v, v_0, X[2], args=(alpha,branch_number,H),epsrel = 1e-012)[0]
     # Return the dynamics of the linear system
     return array([xi_v,
                   0,
@@ -252,6 +255,11 @@ def dX_deps_SIR_I(X, t=0,*parameters):
     return array([xi_I,
                   0,
                   1])
+
+def find_nearest(array_temp, value):
+    array_temp = asarray(array_temp)
+    idx = argmin(abs(array_temp - value))
+    return array_temp[idx]
 #==============================================================
 # Function 7: plot_LaTeX_2D
 # This functions enable us to reproduce our plots using pgfplots in LaTeX
