@@ -88,7 +88,7 @@ ax_1[0].plot(u, v, '-', label='Original population, $(u,v)$',
 ax_1[0].plot(u_transformed_2, v_transformed_2, '-',
              label='Transformed population, $(\\hat{u},v)$', color=(35/256,139/256,69/256), linewidth=3.0)
 ax_1[0].plot(asarray(u_sym[0]), asarray([v[u_indices[0]]*(index+1)/(index+1) for index in range(len(epsilon_vec))]), '--',
-             label="$\\left.\\Gamma_{\\epsilon}^{u}\\right|_{\\epsilon=" + str(epsilon) + "}$", color=(0, 0, 0), linewidth=2.0)
+             label="$\\left.\\Gamma_{2,\\epsilon}^{u}\\right|_{\\epsilon=" + str(epsilon) + "}$", color=(0, 0, 0), linewidth=2.0)
 for index, u_index in enumerate(list(u_indices)):
     ax_1[0].plot(asarray(u_sym[index]), asarray([v[u_index]*((index+1)/(index+1))
                                                  for index in range(len(epsilon_vec))]), '--', color=(0, 0, 0), linewidth=2.0)
@@ -100,11 +100,12 @@ ax_1[1].plot(u, v, '-', label='Original population, $(u,v)$',
 ax_1[1].plot(u_transformed, v_transformed, '-',
              label='Transformed population, $(u,\\hat{v})$', color=(35/256,139/256,69/256), linewidth=3.0)
 ax_1[1].plot(asarray([u[v_indices[0]]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]), asarray(v_sym[0]),
-             '--', label="$\\left.\\Gamma_{\\epsilon}^{v}\\right|_{\\epsilon=" + str(epsilon) + "}$", color=(0, 0, 0), linewidth=2.0)
+             '--', label="$\\left.\\Gamma_{2,\\epsilon}^{v}\\right|_{\\epsilon=" + str(epsilon) + "}$", color=(0, 0, 0), linewidth=2.0)
 for index, v_index in enumerate(list(v_indices)):
     ax_1[1].plot(asarray([u[v_index]*((index+1)/(index+1)) for index in range(len(epsilon_vec))]),
                  asarray(v_sym[index]), '--', color=(0, 0, 0), linewidth=2.0)
 ax_1[1].grid()
+ax_1[1].legend(loc='best', prop={"size": 20})
 #ax_1[1].legend(loc='best', prop={"size": 20})
 # Set fontsize of labels
 ax_1[0].set_xlabel(xlabel='Rabbits, $u(t)$', fontsize=25)
@@ -227,20 +228,6 @@ u_2_u = concatenate((flip(u_2_start,0), u_2), axis=0)
 v_2_u = concatenate((flip(v_2_start,0), v_2), axis=0)
 t_2_u = concatenate((flip(t_2_start,0), t_2), axis=0)
 # Plot the symmetry again for some other point on the solution curves
-#---------------------------------------------------------------------------------
-# Illustrative example 1
-#magical_indices = [250]
-#delta_t_forward_vec = [0] # Correct
-#delta_t_backward_vec = [1] # Correct
-#delta_t_forward_vec = [1] # Incorrect
-#delta_t_backward_vec = [0] # Incorrect
-#---------------------------------------------------------------------------------
-# Illustrative example 2
-#magical_indices = [275]
-#delta_t_forward_vec = [0] # Incorrect
-#delta_t_backward_vec = [1] # Incorrect
-#delta_t_forward_vec = [1] # Correct
-#delta_t_backward_vec = [0] # Correct
 # #---------------------------------------------------------------------------------
 # Full design
 magical_indices = [25, 75, 125, 175, 200, 225, 250, 275, 300, 350, 400, 450, 500, 550, 600, 650, 700, 775, 800, 850, 875, 900]
@@ -342,13 +329,6 @@ u_2_start, v_2_start = X2_start.T
 u_2_v = concatenate((flip(u_2_start,0), u_2), axis=0)
 v_2_v = concatenate((flip(v_2_start,0), v_2), axis=0)
 t_2_v = concatenate((flip(t_2_start,0), t_2), axis=0)
-
-#---------------------------------------------------------------------------------
-# Illustrative example 2
-#magical_indices_v = [240]
-#delta_t_forward_vec = [0] 
-#delta_t_backward_vec = [0.2] 
-# #---------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------
 # Plot the symmetry again for some other point on the solution curves
 magical_indices_v = [100, 115, 128, 213, 220, 240, 275, 300, 325, 645, 700, 750, 800, 850, 900]
