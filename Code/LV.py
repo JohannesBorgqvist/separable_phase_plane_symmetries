@@ -331,10 +331,10 @@ v_2_v = concatenate((flip(v_2_start,0), v_2), axis=0)
 t_2_v = concatenate((flip(t_2_start,0), t_2), axis=0)
 #---------------------------------------------------------------------------------
 # Plot the symmetry again for some other point on the solution curves
-magical_indices_v = [100, 115, 128, 213, 220, 240, 275, 300, 325, 645, 700, 750, 800, 850, 900]
+magical_indices_v = [100, 115, 128, 213, 220, 240, 275, 300, 325, 645, 700, 750, 800, 850, 900,-1]
 # Illustrative example 1
-delta_t_forward_vec = [2, 0.4, 0.4, 0.0, 0.0, 0.0, 0.2, 0.4, 0.4, 0, 0, 0, 0, 0, 0] 
-delta_t_backward_vec = [0, 0, 0, 0.4, 0.4, 0.2, 0.2, 0, 0, 1, 1, 1, 1, 1, 1] 
+delta_t_forward_vec = [2, 0.4, 0.4, 0.0, 0.0, 0.0, 0.2, 0.4, 0.4, 0, 0, 0, 0, 0, 0, 0] 
+delta_t_backward_vec = [0, 0, 0, 0.4, 0.4, 0.2, 0.2, 0, 0, 1, 1, 1, 1, 1, 1, 1] 
 #---------------------------------------------------------------------------------
 # Allocate memory for our lovely symmetry
 Gamma_v_t_vec = []
