@@ -382,11 +382,6 @@ for useful_index,new_magical_index in enumerate(magical_indices_v):
     Gamma_v_t_vec.append(Gamma_v_t_sparse)
     Gamma_v_u_vec.append(Gamma_v_u_sparse)
     Gamma_v_v_vec.append(Gamma_v_v_sparse)        
-    # Save each of our solutions
-    #Gamma_v_t_vec.append(Gamma_v_t_temp)
-    #Gamma_v_u_vec.append(Gamma_v_u_temp)
-    #Gamma_v_v_vec.append(Gamma_v_v_temp)
-
  # Concatenate to get the full solution curves and the full time
 t_2_v_sparse = linspace(t_2_v[0],t_2_v[-1],200)
 u_2_v = interp(t_2_v_sparse, t_2_v, u_2_v)
@@ -472,8 +467,7 @@ for index in range(len(Gamma_u_t_vec)):
         plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_v_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
     else:
         plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_u_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
-        if magical_indices[index]<100 or magical_indices[index]>115:
-            plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_v_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
+        plot_LaTeX_2D(Gamma_u_t_vec[index],Gamma_u_v_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
 # Plot the solutions as well
 plot_LaTeX_2D(t,u,"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_time.tex","color=r_1,line width=1.5pt,","$u(t)$")
 plot_LaTeX_2D(t_2_u,u_2_u,"../Figures/LaTeX_figures/LV_symmetries/Input/LV_u_time.tex","color=r_2,line width=1.5pt,","$\\hat{u}(t)$")
@@ -488,8 +482,7 @@ for index in range(len(Gamma_v_t_vec)):
         plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_v_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_v_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
     else:
         plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_v_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_v_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
-        if magical_indices_v[index]<109 or magical_indices_v[index]>137:
-            plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_u_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_v_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])            
+        plot_LaTeX_2D(Gamma_v_t_vec[index],Gamma_v_u_vec[index],"../Figures/LaTeX_figures/LV_symmetries/Input/LV_v_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])            
 # Plot the solutions as well
 plot_LaTeX_2D(t,u,"../Figures/LaTeX_figures/LV_symmetries/Input/LV_v_time.tex","color=r_1,line width=1.5pt,","$u(t)$")
 plot_LaTeX_2D(t_2_v,u_2_v,"../Figures/LaTeX_figures/LV_symmetries/Input/LV_v_time.tex","color=r_2,line width=1.5pt,","$\\hat{u}(t)$")
