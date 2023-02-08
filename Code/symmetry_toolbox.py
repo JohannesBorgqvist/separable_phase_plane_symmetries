@@ -211,46 +211,52 @@ def dX_dt_SIR(X, t=0,*parameters):
                    r*X[0]*X[1]-a*X[1]])
 # Function 19: The integrand for the S-directional symmetry of the
 # SIR model
-def integrand_S(s,H_SIR,r,p):
+def integrand_S(s,H_SIR,p):
     # Now we can define the denominator
-    denom = r*((p-s)**2)*(H_SIR - s + p*log(s))
+    denom = ((p-s)**2)*(H_SIR - s + p*log(s))
     # Now, we can return the integral
     return -1/denom
 # Function 20: ODE for the S-directional symmetry of the SIR model
 def dX_deps_SIR_S(X, t=0,*parameters):
     # Extract the parameters
-    H_SIR = parameters[0]
-    r = parameters[1]
-    p = parameters[2]
-    S0 = parameters[3]
+    p = parameters[0]
+    # Calculate the internal energy
+    H_SIR = X[2] + X[1] - p*log(X[1])
+    # Define the lower boundary
+    S0 = p
     # Solve the integral for the time tangent
-    xi_S = quad(integrand_S, S0, X[1], args=(H_SIR,r,p))[0]
+    xi_S = quad(integrand_S, S0, X[1], args=(H_SIR,p))[0]
     # Return the dynamics of the linear system
     return array([xi_S,
                   X[1]/(p-X[1]),
                   0])
 # Function 21: The integrand for the I-directional symmetry of the
 # SIR model
-def integrand_I(s,H_SIR,r,p,branch_number):
+def integrand_I(s,H_SIR,p,branch_number):
     # Define the thingy we're taking the lambert function of
-    I_I = -(exp((s+H_SIR)/p)/p)
+    I_I = -(exp((s-H_SIR)/p)/p)
     #I_I = -(exp((s-H_SIR)/p)/p)
     #Define our lovely factor
     factor_I = 1+lambertw(I_I,branch_number).real
     # Now we can define the denominator
-    denom = r*p*(s**2)*factor_I
+    denom = p*(s**2)*factor_I
     # Now, we can return the integral
     return -1/denom
 # Function 22: ODE for the I-directional symmetry of the SIR model
 def dX_deps_SIR_I(X, t=0,*parameters):
     # Extract the parameters
-    H_SIR = parameters[0]
-    r = parameters[1]
-    p = parameters[2]
-    I0 = parameters[3]
-    branch_number = parameters[4]
+    p = parameters[0]
+    branch_number = parameters[1]
+    # Calculate the internal energy
+    H_SIR = X[2] + X[1] - p*log(X[1])
+    # # Define the min value for the integration
+    # if X[2]<1:
+    #     I0 = -p*lambertw(-(1/p)*exp(-H_SIR/p),0).real
+    # else:
+    #     I0 = -p*lambertw(-(1/p)*exp(-H_SIR/p),-1).real
+    I0 = H_SIR - (p - p*log(p))
     # Solve the integral for the time tangent
-    xi_I = quad(integrand_I, I0, X[2], args=(H_SIR,r,p,branch_number),epsrel = 1e-012)[0]
+    xi_I = quad(integrand_I, I0, X[2], args=(H_SIR,p,branch_number),epsrel = 1e-012)[0]
     # Return the dynamics of the linear system
     return array([xi_I,
                   0,

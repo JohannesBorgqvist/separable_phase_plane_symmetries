@@ -29,7 +29,7 @@ plt.rcParams['text.usetex'] = True
 # Plotting the SIR model
 #=================================================================================
 #=================================================================================
-# DEFINE PARAMETER VALUES
+# # DEFINE PARAMETER VALUES
 r = 1 # In units per days
 p = 1 # In units days (defined as p=a/r)
 a = r*p # In units per individuals per days
@@ -56,7 +56,6 @@ I_trans_S_dir = asarray([(C-epsilon)-S_temp +p*log(S_temp) for S_temp in S])
 epsilon_vec = linspace(0,epsilon,num=200,endpoint=True)
 # Transformations S
 S_sym = []
-#S_indices = [5, 7, 10, 13, 16, 19, 22, 25, 28,30,235,260,290, 310, 340, 373, 420, 455]
 S_indices = [13, 16, 19, 22, 25, 28,30,235,260,290, 310, 340, 373, 420, 455]
 for S_index in list(S_indices):
     trans_vec = [S_transf(S[S_index],epsilon_temp,a,r) for epsilon_temp in list(epsilon_vec)]
@@ -118,8 +117,6 @@ ax_1[1].set_ylim([0, max(I_trans_I_dir)+delta])
 f1.suptitle('Phase plane symmetries of the SIR- model',
             fontsize=30, weight='bold')
 f1.savefig('../Figures/phase_plane_symmetries_SIR.png')
-#plt.show()
-
 
 #=================================================================================
 #=================================================================================
@@ -163,13 +160,10 @@ for index,I_index in enumerate(list(I_indices)):
 # S-directional symmetry of the SIR model
 # ---------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------
-# Define a large epsilon
-epsilon = 0.32
 # Plot the action of the symmetry
 epsilon_vec_dense = linspace(0,epsilon,num=20000,endpoint=True)
 epsilon_vec = linspace(0,epsilon,num=100,endpoint=True)
-# Calculate the initial condition (tryouts)
-S0_time = 1
+# Time vector
 t = linspace(0, 3, 500)              # time
 # initials conditions: Number of infectives I0 and number of susceptibles S0.
 X0 = array([S0, I0])
@@ -184,7 +178,7 @@ H_SIR = I[magical_index] + S[magical_index] - p*log(S[magical_index])
 # Take a point
 X0 = array([t[magical_index], S[magical_index], I[magical_index]])
 # Try to solve the ODE at hand
-Gamma_epsilon, infodict = integrate.odeint(dX_deps_SIR_S, X0, epsilon_vec_dense, args = (H_SIR,r,p,S0_time),full_output=True)
+Gamma_epsilon, infodict = integrate.odeint(dX_deps_SIR_S, X0, epsilon_vec_dense, args = (p,),full_output=True)
 # Split the solution into its component parts
 Gamma_S_t, Gamma_S_S, Gamma_S_I = Gamma_epsilon.T
 # Define a new time vector
@@ -209,7 +203,7 @@ S_2_S = concatenate((flip(S_2_start,0), S_2), axis=0)
 I_2_S = concatenate((flip(I_2_start,0), I_2), axis=0)
 t_2_S = concatenate((flip(t_2_start,0), t_2), axis=0)
 # Plot the symmetry again for some other point on the solution curves
-magical_indices = [20, 40, 60, 80, 100, 120, 130, 140, 150, 160, 167, 173, 295, 305, 315, 325, 335, 345]
+magical_indices = [20, 40, 60, 80, 100, 120, 130, 140, 150, 160, 315, 325, 335, 345, 355, 365, 375, 385, 395, 405, 415, 425, 435, 445, 455, 465, 475, 485, 495]
 # Allocate memory for our lovely symmetry
 Gamma_S_t_vec = []
 Gamma_S_S_vec = []
@@ -219,7 +213,7 @@ for index,new_magical_index in enumerate(magical_indices):
     # Take a point
     X0 = array([t[new_magical_index], S[new_magical_index], I[new_magical_index]])  
     # Try to solve the ODE at hand
-    Gamma_epsilon_temp, infodict = integrate.odeint(dX_deps_SIR_S, X0, epsilon_vec_dense, args = (H_SIR,r,p,S0_time),full_output=True)    
+    Gamma_epsilon_temp, infodict = integrate.odeint(dX_deps_SIR_S, X0, epsilon_vec_dense, args = (p,),full_output=True)    
     # Split the solution into its component parts
     Gamma_S_t_temp, Gamma_S_S_temp, Gamma_S_I_temp = Gamma_epsilon_temp.T
     # Make these vector more sparse than they are currently by means of interpolation
@@ -235,26 +229,23 @@ for index,new_magical_index in enumerate(magical_indices):
 # I-directional symmetry of the SIR model
 # ---------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------
-# Define a large epsilon
-epsilon = 0.07
-#Plot the action of the symmetry
-epsilon_vec = linspace(0,epsilon,num=200,endpoint=True)
-epsilon_vec_dense = linspace(0,epsilon,num=20000,endpoint=True)
 # Magical index
-magical_index = 170
-branch_index_temp = -1
-# Make a test value for the lower limit in the integral
-I0_test = 0.1
+magical_index = 100
 # Take a point
 X0 = array([t[magical_index], S[magical_index], I[magical_index]])
+# Choose branch depending on the value of S
+if I[magical_index]>1:
+    branch_index = -1
+else:
+    branch_index = 0
 # Try to solve the ODE at hand
-Gamma_epsilon, infodict = integrate.odeint(dX_deps_SIR_I, X0, epsilon_vec_dense, args = (H_SIR,r,p,I0_test,branch_index_temp),full_output=True)
+Gamma_epsilon, infodict = integrate.odeint(dX_deps_SIR_I, X0, epsilon_vec_dense, args = (p,branch_index),full_output=True)
 # Split the solution into its component parts
 Gamma_I_t, Gamma_I_S, Gamma_I_I = Gamma_epsilon.T
 # Define a new time vector
-t_2 = linspace(Gamma_I_t[-1], t[-1], 250)
+t_2 = linspace(Gamma_I_t[-1], t[-1], 50000)
 # We need to integrate backwards in time as well to start at 0
-t_2_start = linspace(Gamma_I_t[-1], 0, 250)
+t_2_start = linspace(Gamma_I_t[-1], 0, 50000)
 # Define new initial conditions for the transformed solutions
 X02 = array([Gamma_I_t[-1], Gamma_I_S[-1], Gamma_I_I[-1]])  
 X0_2 = array([Gamma_I_S[-1], Gamma_I_I[-1]])  
@@ -272,23 +263,50 @@ S_2_start, I_2_start = X2_start.T
 S_2_I = concatenate((flip(S_2_start,0), S_2), axis=0)
 I_2_I = concatenate((flip(I_2_start,0), I_2), axis=0)
 t_2_I = concatenate((flip(t_2_start,0), t_2), axis=0)
+
+
 # Plot the symmetry again for some other point on the solution curves
-#magical_indices_I = [20,25,30,35,65, 75, 85, 90]
-#branches_I = [0,0,0,0,0, 0, 0, 0]
-magical_indices_I = [120, 150,175,195, 280, 300, 320, 340]
-branches_I = [-1, -1,-1, -1,0, 0, 0, 0]
+magical_indices_I = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, -1]
+delta_t_forward_vec = [1, 0.75, 0.5, 0.5, 0.5, 0.75, 0.75, 2, 0, 0, 0]
+delta_t_backward_vec = [0, 0, 0, 0, 0, 0, 0, 0.5, 2, 0.5, 0.5]
 # Allocate memory for our lovely symmetry
 Gamma_I_t_vec = []
 Gamma_I_S_vec = []
 Gamma_I_I_vec = []
-# Loop over the indices and plot the symmetry transformation
-for index,new_magical_index in enumerate(magical_indices_I):
+# # Loop over the indices and plot the symmetry transformation
+for useful_index,new_magical_index in enumerate(magical_indices_I):
+    # Extract the delta_t backwards and forwards
+    delta_t_forward = delta_t_forward_vec[useful_index]
+    delta_t_backward = delta_t_backward_vec[useful_index]
     # Take a point
     X0 = array([t[new_magical_index], S[new_magical_index], I[new_magical_index]])  
+    # Choose branch depending on the value of S
+    if S[magical_index]>1:
+        branch_index = -1
+    else:
+        branch_index = 0
     # Try to solve the ODE at hand
-    Gamma_epsilon_temp, infodict = integrate.odeint(dX_deps_SIR_I, X0, epsilon_vec_dense, args = (H_SIR,r,p,I0_test,branches_I[index]),full_output=True)    
+    Gamma_epsilon, infodict = integrate.odeint(dX_deps_SIR_I, X0, epsilon_vec_dense, args = (p,branch_index),full_output=True)    
     # Split the solution into its component parts
-    Gamma_I_t_temp, Gamma_I_S_temp, Gamma_I_I_temp = Gamma_epsilon_temp.T    
+    Gamma_I_t_temp, Gamma_I_S_temp, Gamma_I_I_temp = Gamma_epsilon.T
+    # Find the desired S value
+    S_val = S[new_magical_index]
+    # Tak a lower time value
+    t_lower = where(t_2_I==find_nearest(t_2_I, value=t[new_magical_index]-delta_t_backward))[0][0]
+    t_upper = where(t_2_I==find_nearest(t_2_I, value=t[new_magical_index]+delta_t_forward))[0][0]
+    t_temp = t_2_I[t_lower:t_upper]
+    S_temp = S_2_I[t_lower:t_upper]    
+    # Find the nearest S_val
+    nearest_S_val = find_nearest(S_temp, value=S_val)
+    special_index = where(S_temp==nearest_S_val)[0][0]    
+    if special_index != len(S_temp)-1:
+        t_desired = interp(array([S_val]), array([S_temp[special_index-1], S_temp[special_index], S_temp[special_index+1]]), array([t_temp[special_index-1], t_temp[special_index], t_temp[special_index+1]])) 
+    else:
+        t_desired = interp(array([S_val]), array([S_temp[special_index-1], S_temp[special_index]]), array([t_temp[special_index-1], t_temp[special_index]]))
+    # Calculate a time constant
+    time_constant = ((Gamma_I_t_temp[-1] - t_desired) / (epsilon))
+    # Update Gamma_u_temp
+    Gamma_I_t_temp = reshape(array([val - time_constant*epsilon_vec_dense[index] for index,val in enumerate(Gamma_I_t_temp)]),Gamma_I_t_temp.size)    
     # Make these vector more sparse than they are currently by means of interpolation
     Gamma_I_t_temp = interp(epsilon_vec, epsilon_vec_dense, Gamma_I_t_temp)
     Gamma_I_S_temp = interp(epsilon_vec, epsilon_vec_dense, Gamma_I_S_temp)
@@ -297,6 +315,12 @@ for index,new_magical_index in enumerate(magical_indices_I):
     Gamma_I_t_vec.append(Gamma_I_t_temp)    
     Gamma_I_S_vec.append(Gamma_I_S_temp)    
     Gamma_I_I_vec.append(Gamma_I_I_temp)
+
+# Concatenate to get the full solution curves and the full time
+t_2_I_sparse = linspace(t_2_I[0],t_2_I[-1],200)
+S_2_I = interp(t_2_I_sparse, t_2_I, S_2_I)
+I_2_I = interp(t_2_I_sparse, t_2_I, I_2_I)
+t_2_I = t_2_I_sparse
 #---------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------
 # Plot of symmetries for the SIR model in the time domain
@@ -366,24 +390,6 @@ ax_2[1].set_ylabel(ylabel='Population size [\\# individuals]',fontsize=25)
 # Title and saving the figure
 f2.suptitle('SIR symmetries in the time domain',fontsize=30,weight='bold');
 f2.savefig('../Figures/time_domain_symmetries_SIR.png')
-
-
-I_max = H_SIR - (p-p*log(p))
-I_temp = linspace(0.01,I_max)
-S_temp = array([-p*lambertw(-exp(((I_val-H_SIR)/(p)))/p,-1) for I_val in I_temp])
-S_temp_2 = array([-p*lambertw(-exp(((I_val-H_SIR)/(p)))/p,0) for I_val in I_temp])
-
-f3 = plt.figure(figsize =(5, 4)) 
-ax_3 = f3.add_axes([0.1, 0.1, 0.8, 0.8])
-ax_3.plot(S_temp, I_temp,label="Branch -1") 
-ax_3.plot(S_temp_2, I_temp,label="Branch 0")
-ax_3.grid()
-ax_3.legend(loc='best',prop={"size":20})
-ax_3.set_xlabel(xlabel='Susceptibles, $S(t)$',fontsize=25)
-ax_3.set_ylabel(ylabel='Infected, $I(t)$',fontsize=25)
-f3.suptitle('matplotlib.figure.Figure() class Example\n\n',  
-             fontweight ="bold") 
-
 plt.show()
 
 #=================================================================================
@@ -400,10 +406,8 @@ for index in range(len(Gamma_S_t_vec)):
         plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{SIR},S}_{3,\\epsilon}$")
         plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
     else:
-        if index < 6 or index >12:
-            plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
-        if index>7:
-            plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
+        plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
+        plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
 # Plot the solutions as well
 plot_LaTeX_2D(t,S,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=r_1,line width=1.5pt,","$S(t)$")
 plot_LaTeX_2D(t_2_S,S_2_S,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=r_2,line width=1.5pt,","$\\hat{S}(t)$")
