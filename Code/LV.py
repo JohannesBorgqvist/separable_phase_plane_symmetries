@@ -161,7 +161,6 @@ plot_LaTeX_2D(u_transformed, v_transformed, "../Figures/LaTeX_figures/LV_symmetr
 # =================================================================================
 # Re-define the original solution curve
 # Dimensionless LV parameter
-alpha = 1
 t = linspace(0, 10, 1000)              # time
 # initials conditions: 10 rabbits and 5 foxes
 X0 = array([1.00, 0.10])
@@ -172,8 +171,6 @@ u, v = X1.T
 # Testing to find ICs
 # Calculate internal energy
 H = v[0] + alpha*u[0] - log((u[0]**alpha)*v[0])
-# Epsilon value
-epsilon = 0.5
 # The transformation parameter
 epsilon_vec = linspace(0,epsilon,200)
 epsilon_vec_dense = linspace(0,epsilon,5000)
