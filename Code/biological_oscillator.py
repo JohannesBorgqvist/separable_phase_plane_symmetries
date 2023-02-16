@@ -161,8 +161,6 @@ X0 = array([2, 2])                  # ICs
 r = sqrt(X0[1]**2+X0[0]**2)
 # Define the angle
 theta = arctan(X0[1]/X0[0])
-# Define the internal energy
-H = ((r)/(abs(1-r)))*exp(-((theta)/(omega)))
 # Solve the system of ODEs
 X1_os, infodict = integrate.odeint(dX_dt_os_polar, array([theta,r]), t, args = (omega,),full_output=True)
 # Extract the original solution with the defined parameters and initial conditions
@@ -172,9 +170,13 @@ u_os = r_os*cos(theta_os)
 v_os = r_os*sin(theta_os)
 # Transformation parameters
 epsilon_r=1
+#epsilon_r = 0.5
 epsilon_theta = pi/2
+#epsilon_theta = 0.5
 # Plot the action of the symmetry
 epsilon_vec = arange(0,epsilon_r,epsilon_r/100)
+# A really dense epsilon vector
+epsilon_vec_dense = linspace(0,epsilon_r,10000)
 #=================================================================================
 # The indices we wish to transform
 lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
@@ -185,14 +187,18 @@ Gamma_os_r_v_1 = []
 # Loop over our indices and find the transformations
 for lin_index in lin_indices:
     # Get our transformations
-    X_r, infodict = integrate.odeint(Gamma_r_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec, args = ((omega),H),full_output=True)
+    X_r, infodict = integrate.odeint(Gamma_r_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec_dense, args = (omega,),full_output=True)
     infodict['message']                     # >>> 'Integration successful.'    
     # Extract transformations
     Gamma_os_r_t_temp,Gamma_os_r_u_temp, Gamma_os_r_v_temp = X_r.T
+    # Reduce the sparsity of these vectors which are very dense
+    Gamma_os_r_t_temp_sparse = interp(epsilon_vec, epsilon_vec_dense, Gamma_os_r_t_temp)
+    Gamma_os_r_u_temp_sparse = interp(epsilon_vec, epsilon_vec_dense, Gamma_os_r_u_temp)
+    Gamma_os_r_v_temp_sparse = interp(epsilon_vec, epsilon_vec_dense, Gamma_os_r_v_temp)    
     # Save our transformations
-    Gamma_os_r_t_1.append(Gamma_os_r_t_temp)
-    Gamma_os_r_u_1.append(Gamma_os_r_u_temp)
-    Gamma_os_r_v_1.append(Gamma_os_r_v_temp)
+    Gamma_os_r_t_1.append(Gamma_os_r_t_temp_sparse)
+    Gamma_os_r_u_1.append(Gamma_os_r_u_temp_sparse)
+    Gamma_os_r_v_1.append(Gamma_os_r_v_temp_sparse)
 # The transformed time as well
 t_transformed_r = linspace(Gamma_os_r_t_1[0][-1],t[-1],len(t))
 # Solve to get the transformed angle solution
@@ -204,6 +210,8 @@ u_os_r_2, v_os_r_2 = X1_r.T
 lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
 # Plot the action of the symmetry
 epsilon_vec = arange(0,epsilon_theta,epsilon_theta/50)
+# A really dense epsilon vector
+epsilon_vec_dense = linspace(0,epsilon_theta,5000)
 # Allocate our empty lists
 Gamma_os_theta_t_1 = []
 Gamma_os_theta_u_1 = []
@@ -211,18 +219,22 @@ Gamma_os_theta_v_1 = []
 # Loop over our indices and find the transformations
 for lin_index in lin_indices:
     # Get our transformations
-    X_theta, infodict = integrate.odeint(Gamma_theta_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec, args = ((omega),H),full_output=True)
+    X_theta, infodict = integrate.odeint(Gamma_theta_os_time, array([t[lin_index],u_os[lin_index],v_os[lin_index]]), epsilon_vec_dense, args = (omega,),full_output=True)
     infodict['message']                     # >>> 'Integration successful.'
     # Extract transformations
     Gamma_os_theta_t_temp,Gamma_os_theta_u_temp, Gamma_os_theta_v_temp = X_theta.T
+    # Reduce the sparsity of these vectors which are very dense
+    Gamma_os_theta_t_temp_sparse = interp(epsilon_vec, epsilon_vec_dense, Gamma_os_theta_t_temp)
+    Gamma_os_theta_u_temp_sparse = interp(epsilon_vec, epsilon_vec_dense, Gamma_os_theta_u_temp)
+    Gamma_os_theta_v_temp_sparse = interp(epsilon_vec, epsilon_vec_dense, Gamma_os_theta_v_temp)    
     # Save our transformations
-    Gamma_os_theta_t_1.append(Gamma_os_theta_t_temp)
-    Gamma_os_theta_u_1.append(Gamma_os_theta_u_temp)
-    Gamma_os_theta_v_1.append(Gamma_os_theta_v_temp)
+    Gamma_os_theta_t_1.append(Gamma_os_theta_t_temp_sparse)
+    Gamma_os_theta_u_1.append(Gamma_os_theta_u_temp_sparse)
+    Gamma_os_theta_v_1.append(Gamma_os_theta_v_temp_sparse)    
 # The transformed time as well
 t_transformed_theta = linspace(Gamma_os_theta_t_1[0][-1],t[-1],len(t))
 # Solve to get the transformed angle solution
-X1_theta, infodict = integrate.odeint(dX_dt_os, array([Gamma_os_theta_u_1[0][-1], Gamma_os_theta_v_1[0][-1]]), t_transformed_theta, args = ((omega,H)),full_output=True)    
+X1_theta, infodict = integrate.odeint(dX_dt_os, array([Gamma_os_theta_u_1[0][-1], Gamma_os_theta_v_1[0][-1]]), t_transformed_theta, args = ((omega,)),full_output=True)    
 # Extract the solution
 u_os_theta_2, v_os_theta_2 = X1_theta.T
 #=================================================================================
