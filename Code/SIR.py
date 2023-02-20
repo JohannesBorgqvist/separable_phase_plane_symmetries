@@ -117,39 +117,6 @@ ax_1[1].set_ylim([0, max(I_trans_I_dir)+delta])
 f1.suptitle('Phase plane symmetries of the SIR- model',
             fontsize=30, weight='bold')
 f1.savefig('../Figures/phase_plane_symmetries_SIR.png')
-
-#=================================================================================
-#=================================================================================
-# Plotting the solutions in LaTeX
-#=================================================================================
-#=================================================================================
-# S transformation
-#=================================================================================
-#=================================================================================
-# We add the solutions last
-plot_LaTeX_2D(S,I,"../Figures/LaTeX_figures/SIR_symmetries/Input/S_trans.tex","color=clr_1,line width=2.0pt,","$(S,I)$")
-plot_LaTeX_2D(S,I_trans_S_dir,"../Figures/LaTeX_figures/SIR_symmetries/Input/S_trans.tex","color=clr_2,line width=2.0pt,","$(\\hat{S},\\hat{I})$")
-# The symmetry
-for index,S_index in enumerate(list(S_indices)):
-    if index == 0:
-        plot_LaTeX_2D(asarray(S_sym[index]),asarray([((I[S_index]*(temp_index+1))/(temp_index+1)) for temp_index in range(len(epsilon_vec))]),"../Figures/LaTeX_figures/SIR_symmetries/Input/S_trans.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\mathrm{SIR},S}_{2,\\epsilon}$")
-    else:
-        plot_LaTeX_2D(asarray(S_sym[index]),asarray([((I[S_index]*(temp_index+1))/(temp_index+1)) for temp_index in range(len(epsilon_vec))]),"../Figures/LaTeX_figures/SIR_symmetries/Input/S_trans.tex","color=black,->,>=latex,densely dashed",[])
-
-#=================================================================================
-#=================================================================================
-# I transformation
-#=================================================================================
-#=================================================================================
-plot_LaTeX_2D(S,I,"../Figures/LaTeX_figures/SIR_symmetries/Input/I_trans.tex","color=clr_1,line width=2.0pt,","$(S,I)$")
-plot_LaTeX_2D(S,I_trans_I_dir,"../Figures/LaTeX_figures/SIR_symmetries/Input/I_trans.tex","color=clr_2,line width=2.0pt,","$(\\hat{S},\\hat{I})$")
-# Plot the transformation
-for index,I_index in enumerate(list(I_indices)):
-    if index == 0:
-        plot_LaTeX_2D(asarray([S[I_index]*((temp_index+1)/(temp_index+1)) for temp_index in range(len(epsilon_vec))]),asarray(I_sym[index]),"../Figures/LaTeX_figures/SIR_symmetries/Input/I_trans.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\mathrm{SIR},I}_{2,\\epsilon}$")
-    else:
-        plot_LaTeX_2D(asarray([S[I_index]*((temp_index+1)/(temp_index+1)) for temp_index in range(len(epsilon_vec))]),asarray(I_sym[index]),"../Figures/LaTeX_figures/SIR_symmetries/Input/I_trans.tex","color=black,->,>=latex,densely dashed",[])
-
 #=================================================================================
 #=================================================================================
 # Plot the lifted symmetries in the time domain
@@ -392,41 +359,3 @@ f2.suptitle('SIR symmetries in the time domain',fontsize=30,weight='bold');
 f2.savefig('../Figures/time_domain_symmetries_SIR.png')
 plt.show()
 
-#=================================================================================
-#=================================================================================
-# Plot time domain symmetries in LaTeX as well...
-#=================================================================================
-#=================================================================================
-#--------------------------------------------------------------------------------
-# S-directional
-#--------------------------------------------------------------------------------
-# Plot the symmetries
-for index in range(len(Gamma_S_t_vec)):
-    if index == 0:
-        plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{SIR},S}_{3,\\epsilon}$")
-        plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
-    else:
-        plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
-        plot_LaTeX_2D(Gamma_S_t_vec[index],Gamma_S_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
-# Plot the solutions as well
-plot_LaTeX_2D(t,S,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=r_1,line width=1.5pt,","$S(t)$")
-plot_LaTeX_2D(t_2_S,S_2_S,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=r_2,line width=1.5pt,","$\\hat{S}(t)$")
-plot_LaTeX_2D(t,I,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=r_3,line width=1.5pt,","$I(t)$")
-plot_LaTeX_2D(t_2_S,I_2_S,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_S_time.tex","color=r_4,line width=1.5pt,","$\\hat{I}(t)$")
-
-
-#--------------------------------------------------------------------------------
-# I-directional
-#--------------------------------------------------------------------------------
-for index in range(len(Gamma_I_t_vec)):
-    if index == 0:
-        plot_LaTeX_2D(Gamma_I_t_vec[index],Gamma_I_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt","$\\Gamma^{\\mathrm{SIR},I}_{3,\\epsilon}$")
-        plot_LaTeX_2D(Gamma_I_t_vec[index],Gamma_I_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])        
-    else:
-        plot_LaTeX_2D(Gamma_I_t_vec[index],Gamma_I_S_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])
-        plot_LaTeX_2D(Gamma_I_t_vec[index],Gamma_I_I_vec[index],"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=black,->,>=latex,densely dashed,line width=1.0pt",[])                
-# Plot the solutions as well
-plot_LaTeX_2D(t,S,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=r_1,line width=1.5pt,","$S(t)$")
-plot_LaTeX_2D(t_2_I,S_2_I,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=r_2,line width=1.5pt,","$\\hat{S}(t)$")
-plot_LaTeX_2D(t,I,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=r_3,line width=1.5pt,","$I(t)$")
-plot_LaTeX_2D(t_2_I,I_2_I,"../Figures/LaTeX_figures/SIR_symmetries/Input/SIR_I_time.tex","color=r_4,line width=1.5pt,","$\\hat{I}(t)$")

@@ -279,36 +279,4 @@ def find_nearest(array_temp, value):
     array_temp = asarray(array_temp)
     idx = argmin(abs(array_temp - value))
     return array_temp[idx]
-#==============================================================
-# Function 7: plot_LaTeX_2D
-# This functions enable us to reproduce our plots using pgfplots in LaTeX
-def plot_LaTeX_2D(t,y,file_str,plot_str,legend_str):
-    # Open a file with the append option
-    # so that we can write to the same
-    # file multiple times
-    f = open(file_str, "a")
-    # Create a temporary string which
-    # is the one that does the plotting.
-    # Here we incorporate the input plot_str
-    # which contains the color, and the markers
-    # of the plot at hand
-    if len(legend_str)==0:
-        temp_str = "\\addplot[\nforget plot,\n" + plot_str+ "\n]\n"
-    else:
-        temp_str = "\\addplot[\n" + plot_str+ "\n]\n"
-    # Add the coordinates
-    temp_str += "coordinates {%\n"
-    # Loop over the input files and add
-    # them to the file
-    for i in range(len(t)):
-        temp_str += "(" + str(t[i]) + "," + str(y[i]) + ")\n"
-    # The plotting is done, let's close the shop    
-    temp_str += "};\n"
-    # Add a legend if one is provided
-    if len(legend_str) > 0:
-        temp_str += "\\addlegendentry{" + legend_str + "}\n"
-    # Finally, we write the huge string
-    # we have created
-    f.write("%s"%(temp_str))
-    # Close the file
-    f.close()
+
