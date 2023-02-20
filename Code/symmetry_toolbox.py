@@ -49,6 +49,12 @@ def u_transf(u, epsilon,alpha):
     else:
         u_hat_solution = fsolve(func, u)[0]
     return u_hat_solution
+# Function 2.5: u_transf_ODE
+def u_transf_ODE(X, epsilon=0,*parameters):
+    # Extract the parameters
+    alpha = parameters[0]
+    # Return the dynamics of the biological oscillator
+    return array([ (1/alpha)*(X[0]/(X[0]-1)),0])
 # Function 3: v_transf
 def v_transf(v, epsilon, alpha):
     func = lambda v_hat :  log(v**(1/alpha)) - (v/alpha) + epsilon - (log(v_hat**(1/alpha)) - (v_hat/alpha))

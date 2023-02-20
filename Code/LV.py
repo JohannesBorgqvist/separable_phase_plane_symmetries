@@ -63,11 +63,13 @@ for t_index in list(t_indices):
     t_sym.append(trans_vec)
 # Transformations u
 u_sym = []
-u_indices = [40, 60, 75, 90, 100, 110, 130, 145, 150, 160, 290, 307]
+u_indices = [40, 60, 75, 90, 100, 110, 117, 130, 134, 145, 150, 160, 290, 307]
+#u_indices = [134]
 for u_index in list(u_indices):
-    trans_vec = [u_transf(u[u_index], epsilon_temp, alpha)
-                 for epsilon_temp in list(epsilon_vec)]
-    u_sym.append(trans_vec)
+    #trans_vec = [u_transf(u[u_index], epsilon_temp, alpha) for epsilon_temp in list(epsilon_vec)]
+    X, infodict = integrate.odeint(u_transf_ODE, array([u[u_index], v[u_index]]), epsilon_vec, args = (alpha,),full_output=True)
+    trans_vec, v_trans = X.T    
+    u_sym.append(list(trans_vec))
 # Transformations v
 v_sym = []
 v_indices = [30, 50, 64, 106, 112, 117,125, 140, 155, 170, 300, 350, 400, -1]

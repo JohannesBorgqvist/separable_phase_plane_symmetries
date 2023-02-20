@@ -179,7 +179,9 @@ epsilon_vec = arange(0,epsilon_r,epsilon_r/100)
 epsilon_vec_dense = linspace(0,epsilon_r,10000)
 #=================================================================================
 # The indices we wish to transform
-lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
+#lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
+#print(lin_indices)
+lin_indices = [0, 14, 28, 42, 56, 70, 83, 100, 115, 130, 145, 160, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400] 
 # Allocate our empty lists
 Gamma_os_r_t_1 = []
 Gamma_os_r_u_1 = []
@@ -207,7 +209,9 @@ X1_r, infodict = integrate.odeint(dX_dt_os, array([Gamma_os_r_u_1[0][-1], Gamma_
 u_os_r_2, v_os_r_2 = X1_r.T
 #--------------------------------------------------------------------------------------------------
 # The indices we wish to transform
-lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
+#lin_indices = concatenate([arange(0,50,14),arange(50,450,50)])
+#print(lin_indices)
+lin_indices = [0,  14,  28,  42,  60, 80, 100, 150, 200, 250, 300, 350, 400]
 # Plot the action of the symmetry
 epsilon_vec = arange(0,epsilon_theta,epsilon_theta/50)
 # A really dense epsilon vector
